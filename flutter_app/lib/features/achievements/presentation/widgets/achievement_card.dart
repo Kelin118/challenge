@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/date_formatter.dart';
@@ -26,10 +26,10 @@ class AchievementCard extends StatelessWidget {
         ? 0.0
         : achievement.progress.current / achievement.maxProgress;
     final title = achievement.hidden && !achievement.isUnlocked
-        ? '������� ����������'
+        ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
         : achievement.title;
     final description = achievement.hidden && !achievement.isUnlocked
-        ? '�������� ��������� ����� �������������.'
+        ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'
         : achievement.description;
 
     return InkWell(
@@ -92,10 +92,10 @@ class AchievementCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         achievement.isUnlocked
-                            ? '�������'
+                            ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
                             : isAvailable
-                                ? '�������'
-                                : '�������������',
+                                ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
+                                : 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
                         style: TextStyle(
                           color: achievement.isUnlocked
                               ? AppTheme.success
@@ -169,7 +169,7 @@ class AchievementCard extends StatelessWidget {
                       const Spacer(),
                       Text(
                         achievement.progress.unlockedAt == null
-                            ? '� ��������'
+                            ? 'пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
                             : formatLongDate(achievement.progress.unlockedAt!),
                         style: const TextStyle(
                           color: AppTheme.textMuted,
@@ -187,3 +187,4 @@ class AchievementCard extends StatelessWidget {
     );
   }
 }
+

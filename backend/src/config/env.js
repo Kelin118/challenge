@@ -1,4 +1,4 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 
 function parseCsvToSet(value) {
   return new Set(
@@ -38,3 +38,4 @@ export function requireJwtSecret() {
 
   return env.jwtSecret;
 }
+

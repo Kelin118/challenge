@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Colors;
 
 import '../../data/profile_storage.dart';
@@ -23,11 +23,14 @@ class ProfileController extends ChangeNotifier {
   LocalUserProfile? get activeProfile => activeProfileState?.profile;
 
   Future<void> load() async {
-    final payload = await _storage.load();
-    _profiles = payload?.profiles ?? const [];
-    _activeProfileId = payload?.activeProfileId ?? _profiles.firstOrNull?.profile.id;
-    _isReady = true;
-    notifyListeners();
+    try {
+      final payload = await _storage.load();
+      _profiles = payload?.profiles ?? const [];
+      _activeProfileId = payload?.activeProfileId ?? _profiles.firstOrNull?.profile.id;
+    } finally {
+      _isReady = true;
+      notifyListeners();
+    }
   }
 
   Future<void> registerProfile({
@@ -52,7 +55,7 @@ class ProfileController extends ChangeNotifier {
         username: normalizedUsername.startsWith('@')
             ? normalizedUsername
             : '@$normalizedUsername',
-        about: about.trim().isEmpty ? '����� � ������ ������.' : about.trim(),
+        about: about.trim().isEmpty ? 'пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.' : about.trim(),
         contact: contact.trim(),
         avatarSeed: DateTime.now().millisecondsSinceEpoch % Colors.primaries.length,
         createdAt: DateTime.now(),
@@ -144,3 +147,4 @@ class ProfileController extends ChangeNotifier {
 extension<T> on Iterable<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }
+

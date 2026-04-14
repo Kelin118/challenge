@@ -1,4 +1,4 @@
-import '../../achievements/domain/achievement.dart';
+﻿import '../../achievements/domain/achievement.dart';
 
 class LocalUserProfile {
   const LocalUserProfile({
@@ -205,3 +205,4 @@ class PlayerProfile {
   final int customCount;
   final int pendingProofCount;
 }
+

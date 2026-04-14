@@ -1,4 +1,4 @@
-class DeviceSession {
+﻿class DeviceSession {
   const DeviceSession({
     required this.id,
     this.deviceName,
@@ -39,3 +39,4 @@ class DeviceSession {
     return DateTime.tryParse(value);
   }
 }
+

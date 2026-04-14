@@ -1,4 +1,4 @@
-function invalid(message, code = 'validation_error', status = 400) {
+п»їfunction invalid(message, code = 'validation_error', status = 400) {
   return { valid: false, message, code, status };
 }
 
@@ -6,7 +6,7 @@ export function validateAchievementKey(req) {
   const key = req.params.key?.trim();
 
   if (!key) {
-    return invalid('Ключ достижения обязателен.');
+    return invalid('РљР»СЋС‡ РґРѕСЃС‚РёР¶РµРЅРёСЏ РѕР±СЏР·Р°С‚РµР»РµРЅ.');
   }
 
   return {
@@ -22,19 +22,19 @@ export function validateAchievementProgress(req) {
   const evidenceText = req.body.evidenceText?.trim() || null;
 
   if (!key) {
-    return invalid('Ключ достижения обязателен.');
+    return invalid('РљР»СЋС‡ РґРѕСЃС‚РёР¶РµРЅРёСЏ РѕР±СЏР·Р°С‚РµР»РµРЅ.');
   }
 
   if (absoluteProgress == null && progressDelta == null && evidenceText == null) {
-    return invalid('Нужно передать absoluteProgress, progressDelta или evidenceText.');
+    return invalid('РќСѓР¶РЅРѕ РїРµСЂРµРґР°С‚СЊ absoluteProgress, progressDelta РёР»Рё evidenceText.');
   }
 
   if (absoluteProgress != null && !Number.isFinite(Number(absoluteProgress))) {
-    return invalid('absoluteProgress должен быть числом.');
+    return invalid('absoluteProgress РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ С‡РёСЃР»РѕРј.');
   }
 
   if (progressDelta != null && !Number.isFinite(Number(progressDelta))) {
-    return invalid('progressDelta должен быть числом.');
+    return invalid('progressDelta РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ С‡РёСЃР»РѕРј.');
   }
 
   return {
@@ -53,11 +53,11 @@ export function validateAchievementVerify(req) {
   const evidenceText = req.body.evidenceText?.trim();
 
   if (!key) {
-    return invalid('Ключ достижения обязателен.');
+    return invalid('РљР»СЋС‡ РґРѕСЃС‚РёР¶РµРЅРёСЏ РѕР±СЏР·Р°С‚РµР»РµРЅ.');
   }
 
   if (!evidenceText) {
-    return invalid('evidenceText обязателен.');
+    return invalid('evidenceText РѕР±СЏР·Р°С‚РµР»РµРЅ.');
   }
 
   return {
@@ -68,3 +68,4 @@ export function validateAchievementVerify(req) {
     },
   };
 }
+

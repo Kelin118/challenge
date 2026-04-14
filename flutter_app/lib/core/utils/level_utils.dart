@@ -1,4 +1,4 @@
-class LevelData {
+﻿class LevelData {
   const LevelData({
     required this.level,
     required this.currentLevelMinXp,
@@ -40,3 +40,4 @@ extension on num {
     return x;
   }
 }
+

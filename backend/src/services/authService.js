@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+﻿import bcrypt from 'bcrypt';
 
 import {
   createSession,
@@ -153,3 +153,4 @@ export async function logoutAllSessions(userId) {
 
   return { type: 'success' };
 }
+

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS challenge_submissions (
+﻿CREATE TABLE IF NOT EXISTS challenge_submissions (
   id SERIAL PRIMARY KEY,
   challenge_id INTEGER NOT NULL REFERENCES challenges(id) ON DELETE CASCADE,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -21,3 +21,4 @@ CREATE INDEX IF NOT EXISTS idx_challenge_submissions_user_id
 
 CREATE INDEX IF NOT EXISTS idx_challenge_submissions_status
   ON challenge_submissions (status);
+

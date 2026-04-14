@@ -1,4 +1,4 @@
-import { Router } from 'express';
+﻿import { Router } from 'express';
 
 import {
   acceptSubmissionController,
@@ -31,3 +31,4 @@ router.post('/submissions/:id/accept', authMiddleware, requireRole('moderator'),
 router.post('/submissions/:id/reject', authMiddleware, requireRole('moderator'), validateRequest(validateSubmissionId), rejectSubmissionController);
 
 export default router;
+

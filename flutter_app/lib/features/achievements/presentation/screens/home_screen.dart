@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_panel.dart';
 import '../../../profile/presentation/controllers/profile_controller.dart';
-import '../controllers/achievement_controller.dart';
 import '../../domain/achievement.dart';
+import '../controllers/achievement_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -43,7 +43,9 @@ class HomeScreen extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 32,
-                  backgroundColor: Colors.primaries[user.avatarSeed % Colors.primaries.length].withValues(alpha: 0.24),
+                  backgroundColor: Colors.primaries[
+                      user.avatarSeed % Colors.primaries.length]
+                      .withValues(alpha: 0.24),
                   child: Text(
                     user.initials,
                     style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
@@ -54,11 +56,23 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(user.nickname, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+                      Text(
+                        user.nickname,
+                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                      ),
                       const SizedBox(height: 2),
-                      Text(user.username, style: const TextStyle(color: AppTheme.accent, fontWeight: FontWeight.w700)),
+                      Text(
+                        user.username,
+                        style: const TextStyle(
+                          color: AppTheme.accent,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const SizedBox(height: 4),
-                      Text(user.about, style: const TextStyle(color: AppTheme.textSecondary)),
+                      Text(
+                        user.about,
+                        style: const TextStyle(color: AppTheme.textSecondary),
+                      ),
                     ],
                   ),
                 ),
@@ -74,9 +88,18 @@ class HomeScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Text('�������� ������', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                  const Text(
+                    'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  ),
                   const Spacer(),
-                  Text('${profile.totalXp} XP', style: const TextStyle(color: AppTheme.warning, fontWeight: FontWeight.w800)),
+                  Text(
+                    '${profile.totalXp} XP',
+                    style: const TextStyle(
+                      color: AppTheme.warning,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -93,8 +116,8 @@ class HomeScreen extends StatelessWidget {
               Row(
                 children: [
                   _TinyStat(label: 'LVL', value: '${profile.level}'),
-                  _TinyStat(label: '�������', value: '${profile.unlockedCount}'),
-                  _TinyStat(label: '�� ��������', value: '${profile.pendingProofCount}'),
+                  _TinyStat(label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.unlockedCount}'),
+                  _TinyStat(label: 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.pendingProofCount}'),
                 ],
               ),
             ],
@@ -105,11 +128,14 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('�������� ��������', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+              const Text(
+                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              ),
               const SizedBox(height: 12),
               _rarityStep(
                 label: 'Common',
-                hint: '�������� �����',
+                hint: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ',
                 active: true,
                 color: rarityMeta[AchievementRarity.common]!.color,
               ),
@@ -139,11 +165,14 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('��������� ������', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+              const Text(
+                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              ),
               const SizedBox(height: 12),
               if (recentAchievements.isEmpty)
                 const Text(
-                  '����� � ������ ���������� � ��������� ������� ���������� ������ ���� ���������.',
+                  'пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
                   style: TextStyle(color: AppTheme.textSecondary),
                 )
               else
@@ -160,16 +189,31 @@ class HomeScreen extends StatelessWidget {
                             color: rarityMeta[item.rarity]!.color.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: Text(item.icon, style: TextStyle(color: rarityMeta[item.rarity]!.color, fontSize: 20)),
+                          child: Text(
+                            item.icon,
+                            style: TextStyle(
+                              color: rarityMeta[item.rarity]!.color,
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(item.title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                              Text(
+                                item.title,
+                                style: const TextStyle(fontWeight: FontWeight.w800),
+                              ),
                               const SizedBox(height: 2),
-                              Text(item.description, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                              Text(
+                                item.description,
+                                style: const TextStyle(
+                                  color: AppTheme.textSecondary,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -194,10 +238,21 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          Icon(active ? Icons.lock_open_rounded : Icons.lock_outline_rounded, color: active ? color : AppTheme.textMuted),
+          Icon(
+            active ? Icons.lock_open_rounded : Icons.lock_outline_rounded,
+            color: active ? color : AppTheme.textMuted,
+          ),
           const SizedBox(width: 10),
-          Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w700))),
-          Text(hint, style: TextStyle(color: active ? color : AppTheme.textSecondary, fontSize: 12)),
+          Expanded(
+            child: Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+          Text(
+            hint,
+            style: TextStyle(
+              color: active ? color : AppTheme.textSecondary,
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );
@@ -206,6 +261,7 @@ class HomeScreen extends StatelessWidget {
 
 class _TinyStat extends StatelessWidget {
   const _TinyStat({required this.label, required this.value});
+
   final String label;
   final String value;
 
@@ -225,3 +281,4 @@ class _TinyStat extends StatelessWidget {
     );
   }
 }
+

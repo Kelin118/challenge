@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../controllers/achievement_controller.dart';
@@ -62,12 +62,12 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           const Text(
-            '��������� ����������',
+            'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 4),
           const Text(
-            '��� ���������� � �������� ������ ���������������� ����� ������.',
+            'пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.',
             style: TextStyle(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 16),
@@ -82,13 +82,13 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('�� ������� ��������� ����������', style: TextStyle(fontWeight: FontWeight.w800)),
+                  const Text('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontWeight: FontWeight.w800)),
                   const SizedBox(height: 6),
                   Text(widget.controller.errorMessage!, style: const TextStyle(color: AppTheme.textSecondary)),
                   const SizedBox(height: 10),
                   FilledButton(
                     onPressed: widget.controller.refresh,
-                    child: const Text('���������'),
+                    child: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
                   ),
                 ],
               ),
@@ -98,7 +98,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           TextField(
             onChanged: (value) => setState(() => query = value),
             decoration: const InputDecoration(
-              hintText: '����� ����������',
+              hintText: 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
               prefixIcon: Icon(Icons.search),
             ),
           ),
@@ -106,14 +106,14 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           _buildChoiceWrap<AchievementRarity?>(
             current: rarity,
             options: const [null, ...AchievementRarity.values],
-            labelBuilder: (value) => value == null ? '��� ��������' : rarityMeta[value]!.label,
+            labelBuilder: (value) => value == null ? 'пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ' : rarityMeta[value]!.label,
             onChanged: (value) => setState(() => rarity = value),
           ),
           const SizedBox(height: 10),
           _buildChoiceWrap<AchievementCategory?>(
             current: category,
             options: [null, ...widget.controller.categories],
-            labelBuilder: (value) => value == null ? '��� ���������' : categoryMeta[value]!.label,
+            labelBuilder: (value) => value == null ? 'пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ' : categoryMeta[value]!.label,
             onChanged: (value) => setState(() => category = value),
           ),
           const SizedBox(height: 10),
@@ -121,10 +121,10 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
             current: status,
             options: const ['all', 'unlocked', 'locked', 'hidden'],
             labelBuilder: (value) => switch (value) {
-              'unlocked' => '��������',
-              'locked' => '��������',
-              'hidden' => '�������',
-              _ => '���',
+              'unlocked' => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+              'locked' => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+              'hidden' => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+              _ => 'пїЅпїЅпїЅ',
             },
             onChanged: (value) => setState(() => status = value),
           ),
@@ -139,7 +139,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('������������� ���������', style: TextStyle(fontWeight: FontWeight.w800)),
+                const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontWeight: FontWeight.w800)),
                 const SizedBox(height: 8),
                 Text(widget.controller.rarityUnlockHint(AchievementRarity.rare), style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                 const SizedBox(height: 4),
@@ -152,7 +152,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
           const SizedBox(height: 14),
           Row(
             children: [
-              const Text('�������', style: TextStyle(color: AppTheme.textSecondary)),
+              const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(color: AppTheme.textSecondary)),
               const Spacer(),
               Text('${achievements.length}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
             ],
@@ -175,10 +175,10 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                 children: [
                   Text('?', style: TextStyle(color: AppTheme.accent, fontSize: 28)),
                   SizedBox(height: 10),
-                  Text('������ �� �������', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                  Text('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                   SizedBox(height: 6),
                   Text(
-                    '����� ������� ��� �������� ������ ��������� ������.',
+                    'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: AppTheme.textSecondary),
                   ),
@@ -247,3 +247,4 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
     );
   }
 }
+

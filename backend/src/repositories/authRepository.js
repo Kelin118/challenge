@@ -1,4 +1,4 @@
-import { query, withTransaction } from '../db.js';
+﻿import { query, withTransaction } from '../db.js';
 
 export async function findUserByEmailOrUsername(email, username) {
   return query(
@@ -218,3 +218,4 @@ export async function revokeAllSessionsByUserId(userId) {
     [userId],
   );
 }
+

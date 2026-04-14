@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 
 import '../../data/auth_service.dart';
 import '../../domain/auth_user.dart';
@@ -20,9 +20,12 @@ class AuthController extends ChangeNotifier {
   bool get isAuthenticated => _currentUser != null;
 
   Future<void> load() async {
-    _currentUser = await _authService.restoreSession();
-    _isReady = true;
-    notifyListeners();
+    try {
+      _currentUser = await _authService.restoreSession();
+    } finally {
+      _isReady = true;
+      notifyListeners();
+    }
   }
 
   Future<void> login({
@@ -75,3 +78,4 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 }
+

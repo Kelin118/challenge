@@ -1,3 +1,4 @@
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,6 +18,8 @@ class ApiClient {
         _refreshAccessToken = refreshAccessToken,
         _onUnauthorized = onUnauthorized,
         _httpClient = httpClient ?? http.Client();
+
+  static const Duration _requestTimeout = Duration(seconds: 15);
 
   final Future<String?> Function() _accessTokenProvider;
   final Future<String?> Function() _refreshTokenProvider;
@@ -83,7 +86,7 @@ class ApiClient {
     if (authorized) {
       final accessToken = await _accessTokenProvider();
       if (accessToken == null || accessToken.isEmpty) {
-        throw const UnauthorizedException('����� ����������� �����������');
+        throw const UnauthorizedException('пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
       }
       headers['Authorization'] = 'Bearer $accessToken';
     }
@@ -92,25 +95,33 @@ class ApiClient {
     try {
       switch (method) {
         case 'GET':
-          response = await _httpClient.get(uri, headers: headers);
+          response = await _httpClient
+              .get(uri, headers: headers)
+              .timeout(_requestTimeout);
           break;
         case 'POST':
-          response = await _httpClient.post(
-            uri,
-            headers: headers,
-            body: jsonEncode(body ?? const <String, dynamic>{}),
-          );
+          response = await _httpClient
+              .post(
+                uri,
+                headers: headers,
+                body: jsonEncode(body ?? const <String, dynamic>{}),
+              )
+              .timeout(_requestTimeout);
           break;
         case 'PATCH':
-          response = await _httpClient.patch(
-            uri,
-            headers: headers,
-            body: jsonEncode(body ?? const <String, dynamic>{}),
-          );
+          response = await _httpClient
+              .patch(
+                uri,
+                headers: headers,
+                body: jsonEncode(body ?? const <String, dynamic>{}),
+              )
+              .timeout(_requestTimeout);
           break;
         default:
-          throw const AppException('���������������� HTTP �����');
+          throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ HTTP пїЅпїЅпїЅпїЅпїЅ');
       }
+    } on TimeoutException {
+      throw const NetworkException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
     } on SocketException {
       throw const NetworkException();
     } on http.ClientException {
@@ -149,7 +160,7 @@ class ApiClient {
 
     final decoded = jsonDecode(response.body);
     if (decoded is! Map<String, dynamic>) {
-      throw const AppException('������������ ����� �������');
+      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
     }
 
     if (decoded['success'] == true) {
@@ -200,7 +211,7 @@ class ApiClient {
 
   String _extractErrorMessage(String rawBody) {
     if (rawBody.trim().isEmpty) {
-      return '������ �������';
+      return 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
     }
 
     try {
@@ -226,3 +237,4 @@ class ApiClient {
     return rawBody;
   }
 }
+

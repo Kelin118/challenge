@@ -1,4 +1,4 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+﻿import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenStorage {
   static const _accessTokenKey = 'achievement-vault-flutter/access-token';
@@ -26,3 +26,4 @@ class TokenStorage {
     await _secureStorage.delete(key: _refreshTokenKey);
   }
 }
+

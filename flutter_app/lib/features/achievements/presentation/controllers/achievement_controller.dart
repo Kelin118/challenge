@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 
 import '../../../../core/utils/level_utils.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
@@ -42,7 +42,7 @@ class AchievementController extends ChangeNotifier {
   AchievementStats get stats => _stats;
 
   PlayerProfile get profile {
-    final nickname = activeProfile?.nickname ?? _authController.currentUser?.username ?? '�����';
+    final nickname = activeProfile?.nickname ?? _authController.currentUser?.username ?? 'пїЅпїЅпїЅпїЅпїЅ';
     final hiddenCount = _achievements.where((item) => item.hidden).length;
 
     return PlayerProfile(
@@ -140,13 +140,13 @@ class AchievementController extends ChangeNotifier {
   String rarityUnlockHint(AchievementRarity rarity) {
     switch (rarity) {
       case AchievementRarity.common:
-        return '������� ���������� �������� �����.';
+        return 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.';
       case AchievementRarity.rare:
-        return '������ 1 common-����������, ����� �������������� rare.';
+        return 'пїЅпїЅпїЅпїЅпїЅпїЅ 1 common-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ rare.';
       case AchievementRarity.epic:
-        return '������ 3 rare-����������, ����� �������������� epic.';
+        return 'пїЅпїЅпїЅпїЅпїЅпїЅ 3 rare-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ epic.';
       case AchievementRarity.legendary:
-        return '������ 5 epic-����������, ����� �������������� legendary.';
+        return 'пїЅпїЅпїЅпїЅпїЅпїЅ 5 epic-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ legendary.';
     }
   }
 
@@ -284,4 +284,5 @@ class AchievementController extends ChangeNotifier {
 extension<T> on Iterable<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }
+
 

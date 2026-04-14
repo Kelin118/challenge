@@ -1,4 +1,4 @@
-import { Router } from 'express';
+﻿import { Router } from 'express';
 
 import {
   getActiveSessionsController,
@@ -29,3 +29,4 @@ router.get('/me', authMiddleware, getCurrentUserController);
 router.get('/sessions', authMiddleware, getActiveSessionsController);
 
 export default router;
+

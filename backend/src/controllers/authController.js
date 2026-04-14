@@ -1,4 +1,4 @@
-import {
+﻿import {
   getActiveSessions,
   getCurrentUser,
   loginUser,
@@ -180,3 +180,4 @@ export async function logoutAllSessionsController(req, res) {
     return sendError(res, 'Не удалось завершить все сессии');
   }
 }
+

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS achievement_definitions (
+﻿CREATE TABLE IF NOT EXISTS achievement_definitions (
   id SERIAL PRIMARY KEY,
   key TEXT NOT NULL UNIQUE,
   title TEXT NOT NULL,
@@ -57,3 +57,4 @@ CREATE TABLE IF NOT EXISTS user_stats (
   achievements_count INTEGER NOT NULL DEFAULT 0 CHECK (achievements_count >= 0),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+

@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+﻿import { Pool } from 'pg';
 
 import { env } from './config/env.js';
 
@@ -60,3 +60,4 @@ export async function connectDatabase() {
     return false;
   }
 }
+

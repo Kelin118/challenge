@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 
 import '../../domain/device_session.dart';
 import '../../../auth/data/auth_service.dart';
@@ -31,3 +31,4 @@ class SessionController extends ChangeNotifier {
     }
   }
 }
+

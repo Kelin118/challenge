@@ -1,4 +1,4 @@
-export function sendSuccess(res, data = {}, status = 200) {
+﻿export function sendSuccess(res, data = {}, status = 200) {
   return res.status(status).json({
     success: true,
     data,
@@ -17,3 +17,4 @@ export function sendError(res, message, status = 500, code = 'internal_error', d
     },
   });
 }
+

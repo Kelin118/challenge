@@ -1,4 +1,4 @@
-function invalid(message, code = 'validation_error', status = 400) {
+﻿function invalid(message, code = 'validation_error', status = 400) {
   return { valid: false, message, code, status };
 }
 
@@ -35,3 +35,4 @@ export function validateSubmissionId(req) {
     data: { submissionId },
   };
 }
+

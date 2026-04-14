@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../core/theme/app_theme.dart';
 import '../features/achievements/domain/achievement.dart';
@@ -188,9 +188,9 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
       appBar: AppBar(
         title: Text(
           switch (_index) {
-            0 => '�������',
-            1 => '����������',
-            _ => '����������',
+            0 => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+            1 => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+            _ => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
           },
         ),
         actions: [
@@ -220,9 +220,9 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), label: '�������'),
-          NavigationDestination(icon: Icon(Icons.emoji_events_outlined), label: '����������'),
-          NavigationDestination(icon: Icon(Icons.query_stats_outlined), label: '����������'),
+          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+          NavigationDestination(icon: Icon(Icons.emoji_events_outlined), label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+          NavigationDestination(icon: Icon(Icons.query_stats_outlined), label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
         ],
       ),
     );
@@ -249,7 +249,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
         password: _registerPasswordController.text,
       );
       _registerPasswordController.clear();
-      _showMessage('������� ������. ������ ����� ��� ������ �������.');
+      _showMessage('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.');
     } catch (error) {
       _showMessage(error.toString().replaceFirst('Exception: ', ''));
     }
@@ -337,7 +337,7 @@ class _SplashScreen extends StatelessWidget {
               ),
               SizedBox(height: 6),
               Text(
-                '������� ������� ������ ����',
+                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ',
                 style: TextStyle(color: AppTheme.textSecondary),
               ),
             ],
@@ -347,3 +347,4 @@ class _SplashScreen extends StatelessWidget {
     );
   }
 }
+

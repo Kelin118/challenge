@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/date_formatter.dart';
@@ -219,3 +219,4 @@ class _MetaRow extends StatelessWidget {
     );
   }
 }
+

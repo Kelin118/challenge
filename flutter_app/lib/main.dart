@@ -1,3 +1,5 @@
+﻿import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import 'app/app.dart';
@@ -22,10 +24,6 @@ Future<void> main() async {
   );
   final sessionController = SessionController(authService);
 
-  await profileController.load();
-  await authController.load();
-  await achievementController.load();
-
   runApp(
     AchievementVaultApp(
       authController: authController,
@@ -34,5 +32,17 @@ Future<void> main() async {
       sessionController: sessionController,
     ),
   );
+
+  unawaited(_safeLoad(profileController.load));
+  unawaited(_safeLoad(authController.load));
+  unawaited(_safeLoad(achievementController.load));
+}
+
+Future<void> _safeLoad(Future<void> Function() action) async {
+  try {
+    await action();
+  } catch (_) {
+    // Controllers manage their own fallback state.
+  }
 }
 

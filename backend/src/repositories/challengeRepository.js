@@ -1,4 +1,4 @@
-import { query } from '../db.js';
+﻿import { query } from '../db.js';
 
 export async function createChallengeRecord({
   creatorUserId,
@@ -179,3 +179,4 @@ export async function reviewSubmissionRecord(submissionId, reviewerUserId, statu
     [status, reviewerUserId, submissionId],
   );
 }
+

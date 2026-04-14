@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../features/achievements/domain/achievement.dart';
 
@@ -94,3 +94,4 @@ const categoryMeta = <AchievementCategory, CategoryMeta>{
   AchievementCategory.secret: CategoryMeta(label: 'Секретные', color: Color(0xFFF87070)),
   AchievementCategory.custom: CategoryMeta(label: 'Свои', color: Color(0xFF7DD3FC)),
 };
+

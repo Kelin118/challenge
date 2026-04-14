@@ -1,4 +1,4 @@
-import { query as baseQuery } from '../db.js';
+﻿import { query as baseQuery } from '../db.js';
 
 function run(db, text, params = []) {
   return db.query(text, params);
@@ -317,3 +317,4 @@ export async function getStatsAggregate(userId, db = { query: baseQuery }) {
     [userId],
   );
 }
+

@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+﻿import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 import { requireJwtSecret } from '../config/env.js';
@@ -21,3 +21,4 @@ export function getRefreshTokenExpiresAt() {
   expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_TTL_DAYS);
   return expiresAt;
 }
+

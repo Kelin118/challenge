@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_panel.dart';
@@ -19,26 +19,26 @@ class StatsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         const Text(
-          '����������',
+          'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
         ),
         const SizedBox(height: 4),
         const Text(
-          '��������� XP, �������� � ������ �� ����������� � ����� �����.',
+          'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ XP, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.',
           style: TextStyle(color: AppTheme.textSecondary),
         ),
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _StatTile(label: '�������', value: '${profile.unlockedCount}')),
+            Expanded(child: _StatTile(label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.unlockedCount}')),
             const SizedBox(width: 12),
-            Expanded(child: _StatTile(label: '����� XP', value: '${profile.totalXp}')),
+            Expanded(child: _StatTile(label: 'пїЅпїЅпїЅпїЅпїЅ XP', value: '${profile.totalXp}')),
           ],
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Expanded(child: _StatTile(label: '��������', value: '${profile.completionRate.toStringAsFixed(0)}%')),
+            Expanded(child: _StatTile(label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.completionRate.toStringAsFixed(0)}%')),
             const SizedBox(width: 12),
             Expanded(
               child: _StatTile(
@@ -54,7 +54,7 @@ class StatsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '�������������� �� ��������',
+                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 12),
@@ -82,7 +82,7 @@ class StatsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '���������',
+                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 12),
@@ -110,13 +110,13 @@ class StatsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '����� ������ �������� ������',
+                'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 10),
               if (rarest == null)
                 const Text(
-                  '���� �����. ������ ������� ������ ��� �������.',
+                  'пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
                   style: TextStyle(color: AppTheme.textSecondary),
                 )
               else ...[
@@ -158,3 +158,4 @@ class _StatTile extends StatelessWidget {
     );
   }
 }
+

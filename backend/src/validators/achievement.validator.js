@@ -1,4 +1,4 @@
-function invalid(message, code = 'validation_error', status = 400) {
+﻿function invalid(message, code = 'validation_error', status = 400) {
   return { valid: false, message, code, status };
 }
 
@@ -13,11 +13,11 @@ export function validateCreateChallenge(req) {
   const proofType = req.body.proof_type?.trim() || 'photo';
 
   if (!title || !description || !category || !type) {
-    return invalid('title, description, category и type обязательны');
+    return invalid('title, description, category пїЅ type пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
   }
 
   if (!Number.isInteger(coinCost) || !Number.isInteger(coinReward)) {
-    return invalid('coin_cost и coin_reward должны быть целыми числами');
+    return invalid('coin_cost пїЅ coin_reward пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
   }
 
   return {
@@ -58,7 +58,7 @@ export function validateChallengeId(req) {
   const challengeId = Number(req.params.id);
 
   if (!Number.isInteger(challengeId) || challengeId <= 0) {
-    return invalid('Некорректный id challenge');
+    return invalid('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ id challenge');
   }
 
   return {
@@ -66,3 +66,4 @@ export function validateChallengeId(req) {
     data: { challengeId },
   };
 }
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/achievement.dart';
@@ -74,3 +74,4 @@ class CategoryBadge extends StatelessWidget {
     );
   }
 }
+

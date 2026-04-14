@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+﻿import jwt from 'jsonwebtoken';
 
 import { env } from '../config/env.js';
 import { sendError } from '../utils/apiResponse.js';
@@ -28,3 +28,4 @@ export function authMiddleware(req, res, next) {
     return sendError(res, 'Невалидный токен', 401, 'unauthorized');
   }
 }
+

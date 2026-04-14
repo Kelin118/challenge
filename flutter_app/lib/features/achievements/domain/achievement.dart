@@ -1,4 +1,4 @@
-enum AchievementRarity { common, rare, epic, legendary }
+﻿enum AchievementRarity { common, rare, epic, legendary }
 
 enum AchievementCategory {
   story,
@@ -278,3 +278,4 @@ DateTime? _parseDate(dynamic value) {
   }
   return DateTime.tryParse(value);
 }
+

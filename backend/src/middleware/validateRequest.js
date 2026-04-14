@@ -1,4 +1,4 @@
-import { sendError } from '../utils/apiResponse.js';
+﻿import { sendError } from '../utils/apiResponse.js';
 
 export function validateRequest(validator) {
   return (req, res, next) => {
@@ -16,3 +16,4 @@ export function validateRequest(validator) {
     return next();
   };
 }
+

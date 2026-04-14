@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/date_formatter.dart';
@@ -47,10 +47,10 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
     final rarity = rarityMeta[currentAchievement.rarity]!;
     final isAvailable = widget.controller.isAchievementAvailable(currentAchievement);
     final title = currentAchievement.hidden && !currentAchievement.isUnlocked
-        ? '������� ����������'
+        ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
         : currentAchievement.title;
     final description = currentAchievement.hidden && !currentAchievement.isUnlocked
-        ? '������ ����� ���������� ��������� ����� �������������.'
+        ? 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'
         : currentAchievement.description;
 
     return Scaffold(
@@ -124,7 +124,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('�������� ���� �������������', style: TextStyle(fontWeight: FontWeight.w800)),
+                  const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontWeight: FontWeight.w800)),
                   const SizedBox(height: 6),
                   Text(
                     widget.controller.rarityUnlockHint(currentAchievement.rarity),
@@ -147,7 +147,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
               padding: const EdgeInsets.only(bottom: 12),
               child: OutlinedButton(
                 onPressed: _isSubmitting ? null : () => _incrementProgress(currentAchievement),
-                child: const Text('+1 � ���������'),
+                child: const Text('+1 пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
               ),
             ),
           if (isAvailable && !currentAchievement.isUnlocked)
@@ -160,7 +160,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
                   foregroundColor: AppTheme.background,
                   minimumSize: const Size.fromHeight(52),
                 ),
-                child: const Text('�������� ��� ���������'),
+                child: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
               ),
             ),
         ],
@@ -206,7 +206,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
     final evidenceText = _evidenceController.text.trim();
     if (evidenceText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('����� �������������� ����� ���������.')),
+        const SnackBar(content: Text('пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.')),
       );
       return;
     }
@@ -251,18 +251,18 @@ class _InfoPanel extends StatelessWidget {
     return AppPanel(
       child: Column(
         children: [
-          _row('������', achievement.isUnlocked ? '�������' : '�������'),
-          _row('�������', achievement.hidden ? '��' : '���'),
-          _row('�������', '${achievement.xp} XP'),
-          _row('��������', _verificationLabel(achievement.progress.verificationStatus)),
+          _row('пїЅпїЅпїЅпїЅпїЅпїЅ', achievement.isUnlocked ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ' : 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+          _row('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', achievement.hidden ? 'пїЅпїЅ' : 'пїЅпїЅпїЅ'),
+          _row('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', '${achievement.xp} XP'),
+          _row('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', _verificationLabel(achievement.progress.verificationStatus)),
           const SizedBox(height: 14),
-          _block('������� ���������', achievement.unlockCondition),
+          _block('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', achievement.unlockCondition),
           const SizedBox(height: 14),
-          _block('��������', '${achievement.progress.current} / ${achievement.maxProgress}', progress: progress),
+          _block('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', '${achievement.progress.current} / ${achievement.maxProgress}', progress: progress),
           const SizedBox(height: 14),
           _block(
-            '���� ��������',
-            achievement.progress.unlockedAt == null ? '��� �� �������' : formatLongDate(achievement.progress.unlockedAt!),
+            'пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+            achievement.progress.unlockedAt == null ? 'пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ' : formatLongDate(achievement.progress.unlockedAt!),
           ),
         ],
       ),
@@ -272,13 +272,13 @@ class _InfoPanel extends StatelessWidget {
   String _verificationLabel(VerificationStatus status) {
     switch (status) {
       case VerificationStatus.pending:
-        return '�� ��������';
+        return 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
       case VerificationStatus.approved:
-        return '������������';
+        return 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
       case VerificationStatus.rejected:
-        return '���������';
+        return 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
       case VerificationStatus.none:
-        return '�� ���������';
+        return 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
     }
   }
 
@@ -339,14 +339,14 @@ class _VerifyPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '��������� �������� ����������',
+            'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           Text(
             achievement.verificationType == 'ai_text'
-                ? '����� ��������������. ������ �������� AI-�������� � ������� ���������� ������ ��� �������� ����������.'
-                : '����� ��������������. ������ �������� ����� � ������� ���������� ������ ��� �������� ����������.',
+                ? 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ AI-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'
+                : 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
             style: const TextStyle(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 12),
@@ -354,7 +354,7 @@ class _VerifyPanel extends StatelessWidget {
             controller: controller,
             maxLines: 5,
             decoration: const InputDecoration(
-              hintText: '��������: ��� ������ �� ������, ����� � ����� ��� ���������',
+              hintText: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
             ),
           ),
           const SizedBox(height: 12),
@@ -365,7 +365,7 @@ class _VerifyPanel extends StatelessWidget {
               foregroundColor: AppTheme.background,
               minimumSize: const Size.fromHeight(52),
             ),
-            child: Text(isSubmitting ? '����������...' : '��������� �� ��������'),
+            child: Text(isSubmitting ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ...' : 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
           ),
         ],
       ),
@@ -376,3 +376,4 @@ class _VerifyPanel extends StatelessWidget {
 extension<T> on Iterable<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }
+

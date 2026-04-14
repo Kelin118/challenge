@@ -1,4 +1,4 @@
-const _months = [
+﻿const _months = [
   'января',
   'февраля',
   'марта',
@@ -30,3 +30,4 @@ String formatDateTime(DateTime? value) {
   final minute = local.minute.toString().padLeft(2, '0');
   return '$day.$month.$year $hour:$minute';
 }
+

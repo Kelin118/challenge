@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+﻿import 'dart:io' show Platform;
 
 import '../../../core/constants/app_config.dart';
 import '../../../core/errors/app_exception.dart';
@@ -89,7 +89,7 @@ class AuthService {
     final userJson = response['user'] as Map<String, dynamic>?;
 
     if (accessToken == null || refreshToken == null || userJson == null) {
-      throw const AppException('������ ������ ������������ ����� �����������.');
+      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.');
     }
 
     await _tokenStorage.saveTokens(
@@ -137,7 +137,7 @@ class AuthService {
 
     final userJson = response['user'] as Map<String, dynamic>?;
     if (userJson == null) {
-      throw const AppException('������ �� ������ ������������.');
+      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.');
     }
 
     return AuthUser.fromJson(userJson);
@@ -202,7 +202,7 @@ class AuthService {
         accessToken.isEmpty ||
         nextRefreshToken == null ||
         nextRefreshToken.isEmpty) {
-      throw const AppException('������ �� ������ ����� ������.');
+      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.');
     }
 
     await _tokenStorage.saveTokens(
@@ -247,3 +247,4 @@ class AuthService {
     }
   }
 }
+
