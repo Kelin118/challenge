@@ -26,10 +26,10 @@ class AchievementCard extends StatelessWidget {
         ? 0.0
         : achievement.progress.current / achievement.maxProgress;
     final title = achievement.hidden && !achievement.isUnlocked
-        ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
+        ? 'Скрытое достижение'
         : achievement.title;
     final description = achievement.hidden && !achievement.isUnlocked
-        ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'
+        ? 'Описание станет доступно после выполнения условия.'
         : achievement.description;
 
     return InkWell(
@@ -92,10 +92,10 @@ class AchievementCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         achievement.isUnlocked
-                            ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
+                            ? 'Открыто'
                             : isAvailable
-                                ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
-                                : 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                                ? 'Доступно'
+                                : 'Заблокировано',
                         style: TextStyle(
                           color: achievement.isUnlocked
                               ? AppTheme.success
@@ -123,7 +123,7 @@ class AchievementCard extends StatelessWidget {
                       RarityBadge(rarity: achievement.rarity),
                       const Spacer(),
                       Text(
-                        '${achievement.xp} XP',
+                        '+${achievement.coins} coins',
                         style: const TextStyle(
                           color: AppTheme.warning,
                           fontSize: 12,
@@ -169,7 +169,7 @@ class AchievementCard extends StatelessWidget {
                       const Spacer(),
                       Text(
                         achievement.progress.unlockedAt == null
-                            ? 'пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
+                            ? 'Ещё не открыто'
                             : formatLongDate(achievement.progress.unlockedAt!),
                         style: const TextStyle(
                           color: AppTheme.textMuted,
@@ -187,4 +187,3 @@ class AchievementCard extends StatelessWidget {
     );
   }
 }
-

@@ -16,7 +16,7 @@ export async function getAllDefinitions(db = { query: baseQuery }) {
         category,
         rarity,
         icon,
-        xp_reward,
+        coin_reward,
         target_value,
         is_hidden,
         verification_type,
@@ -40,7 +40,7 @@ export async function seedDefinitions(definitions, db = { query: baseQuery }) {
           category,
           rarity,
           icon,
-          xp_reward,
+          coin_reward,
           target_value,
           is_hidden,
           verification_type,
@@ -54,7 +54,7 @@ export async function seedDefinitions(definitions, db = { query: baseQuery }) {
           category = EXCLUDED.category,
           rarity = EXCLUDED.rarity,
           icon = EXCLUDED.icon,
-          xp_reward = EXCLUDED.xp_reward,
+          coin_reward = EXCLUDED.coin_reward,
           target_value = EXCLUDED.target_value,
           is_hidden = EXCLUDED.is_hidden,
           verification_type = EXCLUDED.verification_type,
@@ -67,7 +67,7 @@ export async function seedDefinitions(definitions, db = { query: baseQuery }) {
         definition.category,
         definition.rarity,
         definition.icon,
-        definition.xpReward,
+        definition.coinReward,
         definition.targetValue,
         definition.isHidden,
         definition.verificationType,
@@ -116,7 +116,7 @@ export async function getUserAchievements(userId, db = { query: baseQuery }) {
         d.category,
         d.rarity,
         d.icon,
-        d.xp_reward,
+        d.coin_reward,
         d.target_value,
         d.is_hidden,
         d.verification_type,
@@ -152,7 +152,7 @@ export async function getUserAchievementByKey(userId, key, db = { query: baseQue
         d.category,
         d.rarity,
         d.icon,
-        d.xp_reward,
+        d.coin_reward,
         d.target_value,
         d.is_hidden,
         d.verification_type,
@@ -250,8 +250,7 @@ export async function getUserStats(userId, db = { query: baseQuery }) {
     `
       SELECT
         user_id,
-        total_xp,
-        level,
+        total_coins,
         unlocked_count,
         achievements_count,
         updated_at
@@ -265,8 +264,7 @@ export async function getUserStats(userId, db = { query: baseQuery }) {
 
 export async function upsertUserStats({
   userId,
-  totalXp,
-  level,
+  totalCoins,
   unlockedCount,
   achievementsCount,
 }, db = { query: baseQuery }) {
@@ -275,29 +273,26 @@ export async function upsertUserStats({
     `
       INSERT INTO user_stats (
         user_id,
-        total_xp,
-        level,
+        total_coins,
         unlocked_count,
         achievements_count,
         updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, NOW())
+      VALUES ($1, $2, $3, $4, NOW())
       ON CONFLICT (user_id) DO UPDATE
       SET
-        total_xp = EXCLUDED.total_xp,
-        level = EXCLUDED.level,
+        total_coins = EXCLUDED.total_coins,
         unlocked_count = EXCLUDED.unlocked_count,
         achievements_count = EXCLUDED.achievements_count,
         updated_at = NOW()
       RETURNING
         user_id,
-        total_xp,
-        level,
+        total_coins,
         unlocked_count,
         achievements_count,
         updated_at
     `,
-    [userId, totalXp, level, unlockedCount, achievementsCount],
+    [userId, totalCoins, unlockedCount, achievementsCount],
   );
 }
 
@@ -306,7 +301,7 @@ export async function getStatsAggregate(userId, db = { query: baseQuery }) {
     db,
     `
       SELECT
-        COALESCE(SUM(CASE WHEN ua.is_unlocked THEN d.xp_reward ELSE 0 END), 0) AS total_xp,
+        COALESCE(SUM(CASE WHEN ua.is_unlocked THEN d.coin_reward ELSE 0 END), 0) AS total_coins,
         COALESCE(SUM(CASE WHEN ua.is_unlocked THEN 1 ELSE 0 END), 0) AS unlocked_count,
         COUNT(d.id) AS achievements_count
       FROM achievement_definitions d
@@ -317,4 +312,3 @@ export async function getStatsAggregate(userId, db = { query: baseQuery }) {
     [userId],
   );
 }
-

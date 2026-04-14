@@ -55,7 +55,7 @@ class ProfileController extends ChangeNotifier {
         username: normalizedUsername.startsWith('@')
             ? normalizedUsername
             : '@$normalizedUsername',
-        about: about.trim().isEmpty ? 'пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.' : about.trim(),
+        about: about.trim().isEmpty ? 'Готов к новому забегу.' : about.trim(),
         contact: contact.trim(),
         avatarSeed: DateTime.now().millisecondsSinceEpoch % Colors.primaries.length,
         createdAt: DateTime.now(),
@@ -147,4 +147,3 @@ class ProfileController extends ChangeNotifier {
 extension<T> on Iterable<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }
-

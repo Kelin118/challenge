@@ -185,8 +185,7 @@ class AppStoragePayload {
 class PlayerProfile {
   const PlayerProfile({
     required this.nickname,
-    required this.totalXp,
-    required this.level,
+    required this.totalCoins,
     required this.unlockedCount,
     required this.hiddenCount,
     required this.totalCount,
@@ -196,8 +195,7 @@ class PlayerProfile {
   });
 
   final String nickname;
-  final int totalXp;
-  final int level;
+  final int totalCoins;
   final int unlockedCount;
   final int hiddenCount;
   final int totalCount;
@@ -205,4 +203,3 @@ class PlayerProfile {
   final int customCount;
   final int pendingProofCount;
 }
-

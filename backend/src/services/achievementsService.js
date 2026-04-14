@@ -20,15 +20,6 @@ const openAiClient = env.openAiApiKey
   ? new OpenAI({ apiKey: env.openAiApiKey })
   : null;
 
-function calculateLevel(totalXp) {
-  let floorRoot = 0;
-  while ((floorRoot + 1) * (floorRoot + 1) * 120 <= totalXp) {
-    floorRoot += 1;
-  }
-
-  return floorRoot + 1;
-}
-
 function buildUnlockHint(targetValue) {
   if (targetValue <= 1) {
     return 'Выполни условие достижения.';
@@ -46,7 +37,7 @@ function mapDefinition(row) {
     category: row.category,
     rarity: row.rarity,
     icon: row.icon,
-    xpReward: row.xp_reward,
+    coinReward: row.coin_reward,
     targetValue: row.target_value,
     isHidden: row.is_hidden,
     verificationType: row.verification_type,
@@ -74,21 +65,19 @@ function mapAchievement(row) {
 async function recalculateStats(userId, db) {
   const aggregateResult = await getStatsAggregate(userId, db);
   const aggregate = aggregateResult.rows[0] ?? {
-    total_xp: 0,
+    total_coins: 0,
     unlocked_count: 0,
     achievements_count: 0,
   };
 
-  const totalXp = Number(aggregate.total_xp ?? 0);
+  const totalCoins = Number(aggregate.total_coins ?? 0);
   const unlockedCount = Number(aggregate.unlocked_count ?? 0);
   const achievementsCount = Number(aggregate.achievements_count ?? 0);
-  const level = calculateLevel(totalXp);
 
   const statsResult = await upsertUserStats(
     {
       userId,
-      totalXp,
-      level,
+      totalCoins,
       unlockedCount,
       achievementsCount,
     },
@@ -99,8 +88,7 @@ async function recalculateStats(userId, db) {
 
   return {
     userId: stats.user_id,
-    totalXp: Number(stats.total_xp),
-    level: Number(stats.level),
+    totalCoins: Number(stats.total_coins),
     unlockedCount: Number(stats.unlocked_count),
     totalCount: Number(stats.achievements_count),
     progressPercent: Number(stats.achievements_count) === 0
@@ -356,8 +344,7 @@ export async function getStoredUserStats(userId) {
     type: 'success',
     stats: {
       userId: stats.user_id,
-      totalXp: Number(stats.total_xp),
-      level: Number(stats.level),
+      totalCoins: Number(stats.total_coins),
       unlockedCount: Number(stats.unlocked_count),
       totalCount: Number(stats.achievements_count),
       progressPercent: Number(stats.achievements_count) === 0
@@ -367,4 +354,3 @@ export async function getStoredUserStats(userId) {
     },
   };
 }
-

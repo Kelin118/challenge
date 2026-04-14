@@ -1,12 +1,12 @@
 ﻿import 'package:flutter/material.dart';
 
-import 'package:achievement_vault_flutter/core/theme/app_theme.dart';
-import 'package:achievement_vault_flutter/core/widgets/app_panel.dart';
-import 'package:achievement_vault_flutter/features/achievements/presentation/controllers/achievement_controller.dart';
-import 'package:achievement_vault_flutter/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:achievement_vault_flutter/features/profile/presentation/controllers/profile_controller.dart';
-import 'package:achievement_vault_flutter/features/sessions/presentation/controllers/session_controller.dart';
-import 'package:achievement_vault_flutter/features/sessions/presentation/screens/active_sessions_screen.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_panel.dart';
+import '../../../achievements/presentation/controllers/achievement_controller.dart';
+import '../../../auth/presentation/controllers/auth_controller.dart';
+import '../../presentation/controllers/profile_controller.dart';
+import '../../../sessions/presentation/controllers/session_controller.dart';
+import '../../../sessions/presentation/screens/active_sessions_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
@@ -55,11 +55,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final profile = widget.achievementController.profile;
     final active = widget.profileController.activeProfile!;
-    final level = widget.achievementController.levelData;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+        title: const Text('Профиль'),
         actions: [
           IconButton(
             onPressed: () async {
@@ -69,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             },
             icon: const Icon(Icons.logout),
-            tooltip: 'пїЅпїЅпїЅпїЅпїЅ',
+            tooltip: 'Выйти',
           ),
         ],
       ),
@@ -106,12 +105,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                Column(
-                  children: [
-                    const Text('LVL', style: TextStyle(color: AppTheme.textMuted, fontSize: 10, fontWeight: FontWeight.w700)),
-                    Text('${profile.level}', style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
-                  ],
-                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          AppPanel(
+            child: Row(
+              children: [
+                Expanded(child: _MetricTile(label: 'Монеты', value: '${profile.totalCoins}')),
+                const SizedBox(width: 12),
+                Expanded(child: _MetricTile(label: 'Открыто', value: '${profile.unlockedCount}/${profile.totalCount}')),
+                const SizedBox(width: 12),
+                Expanded(child: _MetricTile(label: 'В процессе', value: '${widget.achievementController.inProgressCount}')),
               ],
             ),
           ),
@@ -120,10 +125,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                const Text('Устройства', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 8),
                 const Text(
-                  'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.',
+                  'Просмотри активные устройства и заверши лишние сессии.',
                   style: TextStyle(color: AppTheme.textSecondary),
                 ),
                 const SizedBox(height: 12),
@@ -140,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     foregroundColor: AppTheme.background,
                     minimumSize: const Size.fromHeight(50),
                   ),
-                  child: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+                  child: const Text('Активные устройства'),
                 ),
               ],
             ),
@@ -150,45 +155,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                const Text('Редактирование профиля', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 12),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: LinearProgressIndicator(
-                    value: level.levelProgress,
-                    minHeight: 10,
-                    backgroundColor: Colors.white.withValues(alpha: 0.08),
-                    valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.accent),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text('${profile.totalXp} XP', style: const TextStyle(color: AppTheme.warning, fontWeight: FontWeight.w800)),
-                    const Spacer(),
-                    Text(
-                      'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ${profile.unlockedCount}/${profile.totalCount}',
-                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          AppPanel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                const SizedBox(height: 12),
-                TextField(controller: _nameController, decoration: const InputDecoration(hintText: 'пїЅпїЅпїЅ')),
+                TextField(controller: _nameController, decoration: const InputDecoration(hintText: 'Имя')),
                 const SizedBox(height: 12),
                 TextField(controller: _usernameController, decoration: const InputDecoration(hintText: 'username', prefixText: '@')),
                 const SizedBox(height: 12),
-                TextField(controller: _aboutController, decoration: const InputDecoration(hintText: 'пїЅпїЅпїЅпїЅпїЅпїЅ / пїЅ пїЅпїЅпїЅпїЅ')),
+                TextField(controller: _aboutController, decoration: const InputDecoration(hintText: 'Статус / о себе')),
                 const SizedBox(height: 12),
-                TextField(controller: _contactController, decoration: const InputDecoration(hintText: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ')),
+                TextField(controller: _contactController, decoration: const InputDecoration(hintText: 'Контакт')),
                 const SizedBox(height: 12),
                 FilledButton(
                   onPressed: () async {
@@ -199,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       contact: _contactController.text,
                     );
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ')));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Профиль обновлён')));
                     }
                   },
                   style: FilledButton.styleFrom(
@@ -207,7 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     foregroundColor: AppTheme.background,
                     minimumSize: const Size.fromHeight(50),
                   ),
-                  child: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+                  child: const Text('Сохранить изменения'),
                 ),
               ],
             ),
@@ -217,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                const Text('Профили', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 10),
                 ...widget.profileController.profiles.map((item) {
                   final isActive = item.profile.id == active.id;
@@ -259,11 +234,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               final confirmed = await showDialog<bool>(
                                 context: context,
                                 builder: (dialogContext) => AlertDialog(
-                                  title: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ?'),
-                                  content: Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ "${item.profile.nickname}" пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'),
+                                  title: const Text('Удалить профиль?'),
+                                  content: Text('Профиль "${item.profile.nickname}" будет удалён вместе с сохранённым прогрессом.'),
                                   actions: [
-                                    TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('пїЅпїЅпїЅпїЅпїЅпїЅ')),
-                                    TextButton(onPressed: () => Navigator.pop(dialogContext, true), child: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ')),
+                                    TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Отмена')),
+                                    TextButton(onPressed: () => Navigator.pop(dialogContext, true), child: const Text('Удалить')),
                                   ],
                                 ),
                               );
@@ -291,3 +266,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+class _MetricTile extends StatelessWidget {
+  const _MetricTile({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppTheme.cardMuted,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppTheme.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(value, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 6),
+          Text(label, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+        ],
+      ),
+    );
+  }
+}

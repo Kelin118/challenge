@@ -89,7 +89,7 @@ class AuthService {
     final userJson = response['user'] as Map<String, dynamic>?;
 
     if (accessToken == null || refreshToken == null || userJson == null) {
-      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.');
+      throw const AppException('Сервер вернул некорректный ответ авторизации.');
     }
 
     await _tokenStorage.saveTokens(
@@ -137,7 +137,7 @@ class AuthService {
 
     final userJson = response['user'] as Map<String, dynamic>?;
     if (userJson == null) {
-      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.');
+      throw const AppException('Сервер не вернул данные пользователя.');
     }
 
     return AuthUser.fromJson(userJson);
@@ -202,7 +202,7 @@ class AuthService {
         accessToken.isEmpty ||
         nextRefreshToken == null ||
         nextRefreshToken.isEmpty) {
-      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.');
+      throw const AppException('Сервер не вернул новые токены.');
     }
 
     await _tokenStorage.saveTokens(
@@ -247,4 +247,3 @@ class AuthService {
     }
   }
 }
-

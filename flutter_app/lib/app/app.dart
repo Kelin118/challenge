@@ -96,7 +96,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Achievement unlocked',
+                    'Достижение открыто',
                     style: TextStyle(color: AppTheme.success, fontWeight: FontWeight.w800),
                   ),
                   Text(toast.title, style: const TextStyle(color: AppTheme.text)),
@@ -188,9 +188,9 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
       appBar: AppBar(
         title: Text(
           switch (_index) {
-            0 => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
-            1 => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
-            _ => 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+            0 => 'Главная',
+            1 => 'Достижения',
+            _ => 'Статистика',
           },
         ),
         actions: [
@@ -220,9 +220,9 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
-          NavigationDestination(icon: Icon(Icons.emoji_events_outlined), label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
-          NavigationDestination(icon: Icon(Icons.query_stats_outlined), label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Главная'),
+          NavigationDestination(icon: Icon(Icons.emoji_events_outlined), label: 'Достижения'),
+          NavigationDestination(icon: Icon(Icons.query_stats_outlined), label: 'Статистика'),
         ],
       ),
     );
@@ -249,7 +249,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
         password: _registerPasswordController.text,
       );
       _registerPasswordController.clear();
-      _showMessage('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.');
+      _showMessage('Аккаунт создан. Теперь можно войти и создать профиль игрока.');
     } catch (error) {
       _showMessage(error.toString().replaceFirst('Exception: ', ''));
     }
@@ -337,7 +337,7 @@ class _SplashScreen extends StatelessWidget {
               ),
               SizedBox(height: 6),
               Text(
-                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ',
+                'Загрузка профиля игрока',
                 style: TextStyle(color: AppTheme.textSecondary),
               ),
             ],
@@ -347,4 +347,3 @@ class _SplashScreen extends StatelessWidget {
     );
   }
 }
-

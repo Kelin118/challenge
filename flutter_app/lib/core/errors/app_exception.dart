@@ -9,16 +9,15 @@
 }
 
 class UnauthorizedException extends AppException {
-  const UnauthorizedException([super.message = 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'])
+  const UnauthorizedException([super.message = 'Не авторизован'])
       : super(statusCode: 401);
 }
 
 class ForbiddenException extends AppException {
-  const ForbiddenException([super.message = 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'])
+  const ForbiddenException([super.message = 'Доступ запрещён'])
       : super(statusCode: 403);
 }
 
 class NetworkException extends AppException {
-  const NetworkException([super.message = 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ']);
+  const NetworkException([super.message = 'Не удалось подключиться к серверу']);
 }
-

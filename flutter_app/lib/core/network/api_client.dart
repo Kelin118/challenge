@@ -86,7 +86,7 @@ class ApiClient {
     if (authorized) {
       final accessToken = await _accessTokenProvider();
       if (accessToken == null || accessToken.isEmpty) {
-        throw const UnauthorizedException('пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
+        throw const UnauthorizedException('Нужна авторизация пользователя');
       }
       headers['Authorization'] = 'Bearer $accessToken';
     }
@@ -95,9 +95,7 @@ class ApiClient {
     try {
       switch (method) {
         case 'GET':
-          response = await _httpClient
-              .get(uri, headers: headers)
-              .timeout(_requestTimeout);
+          response = await _httpClient.get(uri, headers: headers).timeout(_requestTimeout);
           break;
         case 'POST':
           response = await _httpClient
@@ -118,10 +116,10 @@ class ApiClient {
               .timeout(_requestTimeout);
           break;
         default:
-          throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ HTTP пїЅпїЅпїЅпїЅпїЅ');
+          throw const AppException('Неподдерживаемый HTTP метод');
       }
     } on TimeoutException {
-      throw const NetworkException('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
+      throw const NetworkException('Сервер не отвечает');
     } on SocketException {
       throw const NetworkException();
     } on http.ClientException {
@@ -160,7 +158,7 @@ class ApiClient {
 
     final decoded = jsonDecode(response.body);
     if (decoded is! Map<String, dynamic>) {
-      throw const AppException('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
+      throw const AppException('Некорректный ответ сервера');
     }
 
     if (decoded['success'] == true) {
@@ -211,7 +209,7 @@ class ApiClient {
 
   String _extractErrorMessage(String rawBody) {
     if (rawBody.trim().isEmpty) {
-      return 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+      return 'Ошибка сервера';
     }
 
     try {
@@ -237,4 +235,3 @@ class ApiClient {
     return rawBody;
   }
 }
-

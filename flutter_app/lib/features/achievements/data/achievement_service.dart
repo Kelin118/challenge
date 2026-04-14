@@ -83,7 +83,7 @@ class AchievementApiService {
 
     if (achievementJson == null || statsJson == null) {
       throw const AchievementApiException(
-        'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
+        'Сервер вернул некорректный ответ после обновления прогресса.',
       );
     }
 
@@ -112,13 +112,13 @@ class AchievementApiService {
 
     if (achievementJson == null || statsJson == null) {
       throw const AchievementApiException(
-        'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
+        'Сервер вернул некорректный ответ после верификации.',
       );
     }
 
     return AchievementVerifyResult(
       approved: response['approved'] as bool? ?? false,
-      reason: response['reason'] as String? ?? 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
+      reason: response['reason'] as String? ?? 'Ответ по проверке не был получен.',
       achievement: Achievement.fromJson(achievementJson),
       stats: AchievementStats.fromJson(statsJson),
     );
@@ -133,4 +133,3 @@ class AchievementApiException implements Exception {
   @override
   String toString() => message;
 }
-

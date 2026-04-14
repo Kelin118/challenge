@@ -24,7 +24,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final profile = achievementController.profile;
     final user = profileController.activeProfile!;
-    final level = achievementController.levelData;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -43,8 +42,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 32,
-                  backgroundColor: Colors.primaries[
-                      user.avatarSeed % Colors.primaries.length]
+                  backgroundColor: Colors.primaries[user.avatarSeed % Colors.primaries.length]
                       .withValues(alpha: 0.24),
                   child: Text(
                     user.initials,
@@ -86,38 +84,32 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Text(
-                    'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                  ),
-                  const Spacer(),
-                  Text(
-                    '${profile.totalXp} XP',
-                    style: const TextStyle(
-                      color: AppTheme.warning,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
+              const Text(
+                'Баланс монет',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 12),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(999),
-                child: LinearProgressIndicator(
-                  value: level.levelProgress,
-                  minHeight: 10,
-                  backgroundColor: Colors.white.withValues(alpha: 0.08),
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.accent),
+              Center(
+                child: Column(
+                  children: [
+                    const Text(
+                      'Coins',
+                      style: TextStyle(color: AppTheme.textMuted, fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      '${profile.totalCoins}',
+                      style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: AppTheme.warning),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 14),
               Row(
                 children: [
-                  _TinyStat(label: 'LVL', value: '${profile.level}'),
-                  _TinyStat(label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.unlockedCount}'),
-                  _TinyStat(label: 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.pendingProofCount}'),
+                  _TinyStat(label: 'Открыто', value: '${profile.unlockedCount}'),
+                  _TinyStat(label: 'В процессе', value: '${achievementController.inProgressCount}'),
+                  _TinyStat(label: 'На проверке', value: '${profile.pendingProofCount}'),
                 ],
               ),
             ],
@@ -129,13 +121,13 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                'Лестница редкости',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 12),
               _rarityStep(
                 label: 'Common',
-                hint: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ',
+                hint: 'Доступно сразу',
                 active: true,
                 color: rarityMeta[AchievementRarity.common]!.color,
               ),
@@ -166,13 +158,13 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                'Недавние открытия',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 12),
               if (recentAchievements.isEmpty)
                 const Text(
-                  'пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
+                  'Пока у тебя нет новых открытых достижений. Продолжай играть и выполнять условия, чтобы пополнить коллекцию.',
                   style: TextStyle(color: AppTheme.textSecondary),
                 )
               else
@@ -208,10 +200,11 @@ class HomeScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                item.description,
+                                '+${item.coins} coins',
                                 style: const TextStyle(
-                                  color: AppTheme.textSecondary,
+                                  color: AppTheme.warning,
                                   fontSize: 12,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ],
@@ -281,4 +274,3 @@ class _TinyStat extends StatelessWidget {
     );
   }
 }
-

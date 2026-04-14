@@ -19,33 +19,28 @@ class StatsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         const Text(
-          'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+          'Статистика',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
         ),
         const SizedBox(height: 4),
         const Text(
-          'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ XP, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.',
+          'Смотри баланс монет, прогресс и распределение достижений по редкости и категориям.',
           style: TextStyle(color: AppTheme.textSecondary),
         ),
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _StatTile(label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.unlockedCount}')),
+            Expanded(child: _StatTile(label: 'Монеты', value: '${profile.totalCoins}')),
             const SizedBox(width: 12),
-            Expanded(child: _StatTile(label: 'пїЅпїЅпїЅпїЅпїЅ XP', value: '${profile.totalXp}')),
+            Expanded(child: _StatTile(label: 'Открыто', value: '${profile.unlockedCount}')),
           ],
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Expanded(child: _StatTile(label: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', value: '${profile.completionRate.toStringAsFixed(0)}%')),
+            Expanded(child: _StatTile(label: 'В процессе', value: '${controller.inProgressCount}')),
             const SizedBox(width: 12),
-            Expanded(
-              child: _StatTile(
-                label: 'Legendary',
-                value: '${controller.unlockedByRarity[AchievementRarity.legendary] ?? 0}',
-              ),
-            ),
+            Expanded(child: _StatTile(label: 'Прогресс', value: '${profile.completionRate.toStringAsFixed(0)}%')),
           ],
         ),
         const SizedBox(height: 16),
@@ -54,7 +49,7 @@ class StatsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                'Распределение по редкости',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 12),
@@ -82,7 +77,7 @@ class StatsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                'Категории',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 12),
@@ -110,17 +105,19 @@ class StatsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ',
+                'Самое редкое открытое достижение',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 10),
               if (rarest == null)
                 const Text(
-                  'пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
+                  'Пока пусто. Открой первые достижения, чтобы увидеть здесь лучший трофей.',
                   style: TextStyle(color: AppTheme.textSecondary),
                 )
               else ...[
                 Text(rarest.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                const SizedBox(height: 6),
+                Text('+${rarest.coins} coins', style: const TextStyle(color: AppTheme.warning, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 6),
                 Text(rarest.description, style: const TextStyle(color: AppTheme.textSecondary)),
               ],
@@ -158,4 +155,3 @@ class _StatTile extends StatelessWidget {
     );
   }
 }
-

@@ -23,7 +23,7 @@ class AchievementDefinition {
     required this.category,
     required this.rarity,
     required this.icon,
-    required this.xpReward,
+    required this.coinReward,
     required this.targetValue,
     required this.isHidden,
     required this.verificationType,
@@ -39,7 +39,7 @@ class AchievementDefinition {
   final AchievementCategory category;
   final AchievementRarity rarity;
   final String icon;
-  final int xpReward;
+  final int coinReward;
   final int targetValue;
   final bool isHidden;
   final String verificationType;
@@ -55,7 +55,7 @@ class AchievementDefinition {
         'category': category.name,
         'rarity': rarity.name,
         'icon': icon,
-        'xpReward': xpReward,
+        'coinReward': coinReward,
         'targetValue': targetValue,
         'isHidden': isHidden,
         'verificationType': verificationType,
@@ -73,7 +73,7 @@ class AchievementDefinition {
       category: _parseCategory(json['category'] as String?),
       rarity: _parseRarity(json['rarity'] as String?),
       icon: json['icon'] as String? ?? '?',
-      xpReward: json['xpReward'] as int? ?? json['xp_reward'] as int? ?? 0,
+      coinReward: json['coinReward'] as int? ?? json['coin_reward'] as int? ?? 0,
       targetValue: json['targetValue'] as int? ?? json['target_value'] as int? ?? 1,
       isHidden: json['isHidden'] as bool? ?? json['is_hidden'] as bool? ?? false,
       verificationType: json['verificationType'] as String? ?? json['verification_type'] as String? ?? 'none',
@@ -140,7 +140,7 @@ class Achievement {
   String get description => definition.description;
   AchievementRarity get rarity => definition.rarity;
   bool get hidden => definition.isHidden;
-  int get xp => definition.xpReward;
+  int get coins => definition.coinReward;
   int get maxProgress => definition.targetValue;
   String get unlockCondition => definition.unlockHint;
   String get icon => definition.icon;
@@ -162,8 +162,7 @@ class Achievement {
 class AchievementStats {
   const AchievementStats({
     this.userId = 0,
-    this.totalXp = 0,
-    this.level = 1,
+    this.totalCoins = 0,
     this.unlockedCount = 0,
     this.totalCount = 0,
     this.progressPercent = 0,
@@ -171,8 +170,7 @@ class AchievementStats {
   });
 
   final int userId;
-  final int totalXp;
-  final int level;
+  final int totalCoins;
   final int unlockedCount;
   final int totalCount;
   final double progressPercent;
@@ -181,8 +179,7 @@ class AchievementStats {
   factory AchievementStats.fromJson(Map<String, dynamic> json) {
     return AchievementStats(
       userId: json['userId'] as int? ?? json['user_id'] as int? ?? 0,
-      totalXp: json['totalXp'] as int? ?? json['total_xp'] as int? ?? 0,
-      level: json['level'] as int? ?? 1,
+      totalCoins: json['totalCoins'] as int? ?? json['total_coins'] as int? ?? 0,
       unlockedCount: json['unlockedCount'] as int? ?? json['unlocked_count'] as int? ?? 0,
       totalCount: json['totalCount'] as int? ?? json['achievements_count'] as int? ?? 0,
       progressPercent: (json['progressPercent'] as num? ?? 0).toDouble(),
@@ -278,4 +275,3 @@ DateTime? _parseDate(dynamic value) {
   }
   return DateTime.tryParse(value);
 }
-

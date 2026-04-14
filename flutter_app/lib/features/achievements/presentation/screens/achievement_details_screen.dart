@@ -42,15 +42,16 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final currentAchievement = widget.controller.achievements
-        .where((item) => item.id == widget.achievement.id)
-        .firstOrNull ?? widget.achievement;
+            .where((item) => item.id == widget.achievement.id)
+            .firstOrNull ??
+        widget.achievement;
     final rarity = rarityMeta[currentAchievement.rarity]!;
     final isAvailable = widget.controller.isAchievementAvailable(currentAchievement);
     final title = currentAchievement.hidden && !currentAchievement.isUnlocked
-        ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
+        ? 'Скрытое достижение'
         : currentAchievement.title;
     final description = currentAchievement.hidden && !currentAchievement.isUnlocked
-        ? 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'
+        ? 'Описание станет доступно после выполнения условия и открытия достижения.'
         : currentAchievement.description;
 
     return Scaffold(
@@ -124,7 +125,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', style: TextStyle(fontWeight: FontWeight.w800)),
+                  const Text('Редкость пока не разблокирована', style: TextStyle(fontWeight: FontWeight.w800)),
                   const SizedBox(height: 6),
                   Text(
                     widget.controller.rarityUnlockHint(currentAchievement.rarity),
@@ -147,7 +148,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
               padding: const EdgeInsets.only(bottom: 12),
               child: OutlinedButton(
                 onPressed: _isSubmitting ? null : () => _incrementProgress(currentAchievement),
-                child: const Text('+1 пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+                child: const Text('+1 к прогрессу'),
               ),
             ),
           if (isAvailable && !currentAchievement.isUnlocked)
@@ -160,7 +161,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
                   foregroundColor: AppTheme.background,
                   minimumSize: const Size.fromHeight(52),
                 ),
-                child: const Text('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+                child: const Text('Отметить как выполненное'),
               ),
             ),
         ],
@@ -206,7 +207,7 @@ class _AchievementDetailsScreenState extends State<AchievementDetailsScreen> {
     final evidenceText = _evidenceController.text.trim();
     if (evidenceText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.')),
+        const SnackBar(content: Text('Опиши доказательство перед отправкой.')),
       );
       return;
     }
@@ -251,18 +252,18 @@ class _InfoPanel extends StatelessWidget {
     return AppPanel(
       child: Column(
         children: [
-          _row('пїЅпїЅпїЅпїЅпїЅпїЅ', achievement.isUnlocked ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ' : 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
-          _row('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', achievement.hidden ? 'пїЅпїЅ' : 'пїЅпїЅпїЅ'),
-          _row('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', '${achievement.xp} XP'),
-          _row('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', _verificationLabel(achievement.progress.verificationStatus)),
+          _row('Статус', achievement.isUnlocked ? 'Открыто' : 'Закрыто'),
+          _row('Скрытое', achievement.hidden ? 'Да' : 'Нет'),
+          _row('Награда', '+${achievement.coins} coins'),
+          _row('Проверка', _verificationLabel(achievement.progress.verificationStatus)),
           const SizedBox(height: 14),
-          _block('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', achievement.unlockCondition),
+          _block('Условие получения', achievement.unlockCondition),
           const SizedBox(height: 14),
-          _block('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', '${achievement.progress.current} / ${achievement.maxProgress}', progress: progress),
+          _block('Прогресс', '${achievement.progress.current} / ${achievement.maxProgress}', progress: progress),
           const SizedBox(height: 14),
           _block(
-            'пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
-            achievement.progress.unlockedAt == null ? 'пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ' : formatLongDate(achievement.progress.unlockedAt!),
+            'Дата открытия',
+            achievement.progress.unlockedAt == null ? 'Ещё не открыто' : formatLongDate(achievement.progress.unlockedAt!),
           ),
         ],
       ),
@@ -272,13 +273,13 @@ class _InfoPanel extends StatelessWidget {
   String _verificationLabel(VerificationStatus status) {
     switch (status) {
       case VerificationStatus.pending:
-        return 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+        return 'На проверке';
       case VerificationStatus.approved:
-        return 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+        return 'Подтверждено';
       case VerificationStatus.rejected:
-        return 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+        return 'Отклонено';
       case VerificationStatus.none:
-        return 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+        return 'Не требуется';
     }
   }
 
@@ -339,14 +340,14 @@ class _VerifyPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+            'Отправка доказательства',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           Text(
             achievement.verificationType == 'ai_text'
-                ? 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ AI-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.'
-                : 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.',
+                ? 'Опиши выполненное действие. Текст будет проверен AI-модулем и обновит статус достижения после проверки.'
+                : 'Опиши выполненное действие. Текст будет отправлен в систему подтверждения и обновит статус достижения после проверки.',
             style: const TextStyle(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 12),
@@ -354,7 +355,7 @@ class _VerifyPanel extends StatelessWidget {
             controller: controller,
             maxLines: 5,
             decoration: const InputDecoration(
-              hintText: 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+              hintText: 'Например: что именно ты сделал, когда и какой был результат',
             ),
           ),
           const SizedBox(height: 12),
@@ -365,7 +366,7 @@ class _VerifyPanel extends StatelessWidget {
               foregroundColor: AppTheme.background,
               minimumSize: const Size.fromHeight(52),
             ),
-            child: Text(isSubmitting ? 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ...' : 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'),
+            child: Text(isSubmitting ? 'Отправляем...' : 'Отправить на проверку'),
           ),
         ],
       ),
@@ -376,4 +377,5 @@ class _VerifyPanel extends StatelessWidget {
 extension<T> on Iterable<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }
+
 

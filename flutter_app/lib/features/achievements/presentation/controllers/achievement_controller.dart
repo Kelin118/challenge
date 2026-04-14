@@ -1,6 +1,5 @@
 ﻿import 'package:flutter/foundation.dart';
 
-import '../../../../core/utils/level_utils.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../profile/domain/profile_models.dart';
 import '../../../profile/presentation/controllers/profile_controller.dart';
@@ -42,13 +41,12 @@ class AchievementController extends ChangeNotifier {
   AchievementStats get stats => _stats;
 
   PlayerProfile get profile {
-    final nickname = activeProfile?.nickname ?? _authController.currentUser?.username ?? 'пїЅпїЅпїЅпїЅпїЅ';
+    final nickname = activeProfile?.nickname ?? _authController.currentUser?.username ?? 'Игрок';
     final hiddenCount = _achievements.where((item) => item.hidden).length;
 
     return PlayerProfile(
       nickname: nickname,
-      totalXp: _stats.totalXp,
-      level: _stats.level,
+      totalCoins: _stats.totalCoins,
       unlockedCount: _stats.unlockedCount,
       hiddenCount: hiddenCount,
       totalCount: _stats.totalCount,
@@ -60,9 +58,7 @@ class AchievementController extends ChangeNotifier {
     );
   }
 
-  int get totalXp => _stats.totalXp;
-
-  LevelData get levelData => calculateLevel(_stats.totalXp);
+  int get totalCoins => _stats.totalCoins;
 
   Achievement? get toastAchievement => toastAchievementId == null
       ? null
@@ -94,6 +90,10 @@ class AchievementController extends ChangeNotifier {
 
   int get unlockedEpicCount => _achievements
       .where((item) => item.isUnlocked && item.rarity == AchievementRarity.epic)
+      .length;
+
+  int get inProgressCount => _achievements
+      .where((item) => !item.isUnlocked && item.progress.current > 0)
       .length;
 
   Future<void> load() async {
@@ -140,13 +140,13 @@ class AchievementController extends ChangeNotifier {
   String rarityUnlockHint(AchievementRarity rarity) {
     switch (rarity) {
       case AchievementRarity.common:
-        return 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.';
+        return 'Обычные достижения доступны сразу.';
       case AchievementRarity.rare:
-        return 'пїЅпїЅпїЅпїЅпїЅпїЅ 1 common-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ rare.';
+        return 'Открой 1 common-достижение, чтобы разблокировать rare.';
       case AchievementRarity.epic:
-        return 'пїЅпїЅпїЅпїЅпїЅпїЅ 3 rare-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ epic.';
+        return 'Открой 3 rare-достижения, чтобы разблокировать epic.';
       case AchievementRarity.legendary:
-        return 'пїЅпїЅпїЅпїЅпїЅпїЅ 5 epic-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ legendary.';
+        return 'Открой 5 epic-достижений, чтобы разблокировать legendary.';
     }
   }
 
@@ -284,5 +284,3 @@ class AchievementController extends ChangeNotifier {
 extension<T> on Iterable<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }
-
-

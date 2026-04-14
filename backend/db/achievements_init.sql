@@ -6,7 +6,7 @@
   category TEXT NOT NULL,
   rarity TEXT NOT NULL DEFAULT 'common',
   icon TEXT NOT NULL,
-  xp_reward INTEGER NOT NULL DEFAULT 0 CHECK (xp_reward >= 0),
+  coin_reward INTEGER NOT NULL DEFAULT 0 CHECK (coin_reward >= 0),
   target_value INTEGER NOT NULL DEFAULT 1 CHECK (target_value > 0),
   is_hidden BOOLEAN NOT NULL DEFAULT FALSE,
   verification_type TEXT NOT NULL DEFAULT 'none',
@@ -51,10 +51,8 @@ CREATE INDEX IF NOT EXISTS idx_user_achievements_unlocked
 
 CREATE TABLE IF NOT EXISTS user_stats (
   user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-  total_xp INTEGER NOT NULL DEFAULT 0 CHECK (total_xp >= 0),
-  level INTEGER NOT NULL DEFAULT 1 CHECK (level >= 1),
+  total_coins INTEGER NOT NULL DEFAULT 0 CHECK (total_coins >= 0),
   unlocked_count INTEGER NOT NULL DEFAULT 0 CHECK (unlocked_count >= 0),
   achievements_count INTEGER NOT NULL DEFAULT 0 CHECK (achievements_count >= 0),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
-
