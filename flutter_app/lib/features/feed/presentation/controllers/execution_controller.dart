@@ -5,6 +5,7 @@ import '../../data/models/submission_model.dart';
 import '../../data/repositories/execution_repository.dart';
 import '../../domain/challenge_completion_event.dart';
 import '../../domain/feed_challenge.dart';
+import '../../domain/proof_upload_state.dart';
 import 'challenge_controller.dart';
 import 'feed_controller.dart';
 import 'wallet_controller.dart';
@@ -29,10 +30,25 @@ class ExecutionController extends ChangeNotifier {
 
   final Map<String, bool> _loadingByChallengeId = {};
   final Map<String, String?> _errorByChallengeId = {};
+  final Map<String, ProofUploadState> _uploadStates = {};
 
   bool get _isAuthenticated => _authController.isAuthenticated;
   bool isLoading(String challengeId) => _loadingByChallengeId[challengeId] ?? false;
   String? errorFor(String challengeId) => _errorByChallengeId[challengeId];
+  ProofUploadState uploadStateFor(String challengeId) {
+    final state = _uploadStates[challengeId];
+    if (state != null) return state;
+
+    final challenge = _challengeController.challengeById(challengeId);
+    final path = challenge?.submissionImagePath;
+    if (path == null || path.isEmpty) {
+      return const ProofUploadState.idle();
+    }
+    if (_isRemoteUrl(path)) {
+      return ProofUploadState.uploaded(remoteUrl: path);
+    }
+    return ProofUploadState.idle(localPath: path);
+  }
 
   Future<void> updateProgress(String challengeId, {int? absoluteProgress, int? progressDelta}) async {
     final participation = _challengeController.participationForChallenge(challengeId);
@@ -59,7 +75,13 @@ class ExecutionController extends ChangeNotifier {
   Future<void> attachSubmissionImage(String challengeId, String imagePath) async {
     final challenge = _challengeController.challengeById(challengeId);
     if (challenge == null) return;
+    _uploadStates[challengeId] = ProofUploadState.idle(localPath: imagePath);
     _feedController.upsertChallenge(challenge.copyWith(submissionImagePath: imagePath));
+    notifyListeners();
+  }
+
+  Future<void> retryProofUpload(String challengeId) async {
+    await _uploadProofIfNeeded(challengeId, forceRetry: true);
   }
 
   Future<void> retrySubmission(String challengeId) async {
@@ -90,10 +112,11 @@ class ExecutionController extends ChangeNotifier {
 
     _setLoading(challengeId, true);
     try {
+      final proofUrl = await _uploadProofIfNeeded(challengeId, fallbackPath: imagePath);
       final result = await _repository.submitExecution(
         participationId: participation.id,
         comment: text,
-        proofUrl: imagePath,
+        proofUrl: proofUrl,
         proofType: _proofTypeName(challenge.verificationType),
       );
       _challengeController.syncExecutionState(
@@ -121,6 +144,42 @@ class ExecutionController extends ChangeNotifier {
         final updated = _feedController.completionByChallengeId(challengeId);
         _feedController.upsertChallenge(challenge.copyWith(completionLikes: updated?.likesCount ?? challenge.completionLikes));
       }
+    }
+  }
+
+  Future<String?> _uploadProofIfNeeded(
+    String challengeId, {
+    String? fallbackPath,
+    bool forceRetry = false,
+  }) async {
+    final challenge = _challengeController.challengeById(challengeId);
+    final currentPath = challenge?.submissionImagePath ?? fallbackPath;
+    if (currentPath == null || currentPath.isEmpty) {
+      return null;
+    }
+    if (_isRemoteUrl(currentPath) && !forceRetry) {
+      _uploadStates[challengeId] = ProofUploadState.uploaded(remoteUrl: currentPath);
+      notifyListeners();
+      return currentPath;
+    }
+
+    _uploadStates[challengeId] = ProofUploadState.uploading(localPath: currentPath);
+    notifyListeners();
+
+    try {
+      final uploaded = await _repository.uploadProof(filePath: currentPath);
+      final remoteUrl = uploaded.url;
+      _uploadStates[challengeId] = ProofUploadState.uploaded(localPath: currentPath, remoteUrl: remoteUrl);
+      if (challenge != null) {
+        _feedController.upsertChallenge(challenge.copyWith(submissionImagePath: remoteUrl));
+      }
+      notifyListeners();
+      return remoteUrl;
+    } catch (error) {
+      final message = error.toString().replaceFirst('Exception: ', '');
+      _uploadStates[challengeId] = ProofUploadState.failed(localPath: currentPath, errorMessage: message);
+      notifyListeners();
+      rethrow;
     }
   }
 
@@ -173,8 +232,12 @@ class ExecutionController extends ChangeNotifier {
           medalAwarded: completion.medalAwarded,
           completionLikes: completion.likesCount,
           completedCount: challenge.completedCount + 1,
+          submissionImagePath: completion.imageProof ?? challenge.submissionImagePath,
         ),
       );
+      if (completion.imageProof != null && completion.imageProof!.isNotEmpty) {
+        _uploadStates[challengeId] = ProofUploadState.uploaded(remoteUrl: completion.imageProof);
+      }
       _walletController.load();
     }
   }
@@ -191,6 +254,7 @@ class ExecutionController extends ChangeNotifier {
     if (!_isAuthenticated) {
       _loadingByChallengeId.clear();
       _errorByChallengeId.clear();
+      _uploadStates.clear();
       notifyListeners();
     }
   }
@@ -203,6 +267,8 @@ class ExecutionController extends ChangeNotifier {
   }
 }
 
+bool _isRemoteUrl(String value) => value.startsWith('http://') || value.startsWith('https://');
+
 String _proofTypeName(FeedVerificationType type) {
   switch (type) {
     case FeedVerificationType.text:
@@ -211,5 +277,3 @@ String _proofTypeName(FeedVerificationType type) {
       return 'photo';
   }
 }
-
-

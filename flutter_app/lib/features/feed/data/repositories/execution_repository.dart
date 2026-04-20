@@ -1,6 +1,7 @@
 ﻿import '../../../../core/network/api_client.dart';
 import '../../../auth/data/auth_service.dart';
 import '../models/participation_model.dart';
+import '../models/proof_upload_result.dart';
 import '../models/submission_model.dart';
 
 class ExecutionMutationResult {
@@ -20,6 +21,22 @@ class ExecutionRepository {
 
   ApiClient get _apiClient => _authService.apiClient;
   String get _baseUrl => _authService.baseUrl;
+
+  Future<ProofUploadResult> uploadProof({required String filePath}) async {
+    final response = await _apiClient.postMultipart(
+      baseUrl: _baseUrl,
+      path: '/api/uploads/proof',
+      filePath: filePath,
+      authorized: true,
+    );
+
+    final upload = response['upload'] as Map<String, dynamic>?;
+    if (upload == null) {
+      throw const FormatException('Upload payload is missing.');
+    }
+
+    return ProofUploadResult.fromJson(upload);
+  }
 
   Future<ParticipationModel> updateProgress({
     required int participationId,

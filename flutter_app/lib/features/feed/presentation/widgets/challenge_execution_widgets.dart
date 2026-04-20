@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/feed_challenge.dart';
+import '../../domain/proof_upload_state.dart';
 import 'feed_widgets.dart';
 
 class ExecutionStatusBanner extends StatelessWidget {
@@ -119,16 +120,20 @@ class SubmissionComposerCard extends StatelessWidget {
     super.key,
     required this.challenge,
     required this.descriptionController,
+    required this.uploadState,
     required this.onPickImage,
     required this.onSubmit,
     required this.onRetry,
+    required this.onRetryUpload,
   });
 
   final FeedChallenge challenge;
   final TextEditingController descriptionController;
+  final ProofUploadState uploadState;
   final VoidCallback onPickImage;
   final VoidCallback onSubmit;
   final VoidCallback onRetry;
+  final VoidCallback onRetryUpload;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +172,8 @@ class SubmissionComposerCard extends StatelessWidget {
                 ],
               ),
             ),
+          const SizedBox(height: 12),
+          _UploadStatusStrip(uploadState: uploadState, onRetryUpload: onRetryUpload),
           const SizedBox(height: 12),
           OutlinedButton.icon(onPressed: isLocked ? null : onPickImage, icon: const Icon(Icons.photo_library_outlined), label: const Text('Добавить фото')),
           const SizedBox(height: 12),
@@ -311,6 +318,79 @@ class MedalCelebrationCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _UploadStatusStrip extends StatelessWidget {
+  const _UploadStatusStrip({required this.uploadState, required this.onRetryUpload});
+
+  final ProofUploadState uploadState;
+  final VoidCallback onRetryUpload;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (uploadState.status) {
+      case ProofUploadStatus.uploading:
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: AppTheme.accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(16)),
+          child: const Row(
+            children: [
+              SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
+              SizedBox(width: 10),
+              Expanded(child: Text('Загружаем proof image в storage...', style: TextStyle(color: AppTheme.textSecondary))),
+            ],
+          ),
+        );
+      case ProofUploadStatus.uploaded:
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: AppTheme.success.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(16)),
+          child: const Row(
+            children: [
+              Icon(Icons.cloud_done_rounded, color: AppTheme.success),
+              SizedBox(width: 10),
+              Expanded(child: Text('Proof загружен. При отправке уйдёт реальный URL.', style: TextStyle(color: AppTheme.textSecondary))),
+            ],
+          ),
+        );
+      case ProofUploadStatus.failed:
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: AppTheme.danger.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(16)),
+          child: Row(
+            children: [
+              const Icon(Icons.cloud_off_rounded, color: AppTheme.danger),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  uploadState.errorMessage?.isNotEmpty == true
+                      ? uploadState.errorMessage!
+                      : 'Upload не удался. Попробуй ещё раз.',
+                  style: const TextStyle(color: AppTheme.textSecondary),
+                ),
+              ),
+              TextButton(onPressed: onRetryUpload, child: const Text('Retry')),
+            ],
+          ),
+        );
+      case ProofUploadStatus.idle:
+        if ((uploadState.localPath ?? '').isEmpty) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: AppTheme.cardMuted, borderRadius: BorderRadius.circular(16)),
+          child: const Text(
+            'Фото готово к upload. При отправке сначала загрузим его в storage, потом создадим submission.',
+            style: TextStyle(color: AppTheme.textSecondary),
+          ),
+        );
+    }
   }
 }
 

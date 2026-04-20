@@ -50,6 +50,7 @@ class _ChallengeExecutionScreenState extends State<ChallengeExecutionScreen> {
         final isLoading = widget.challengeController.isLoading(widget.challengeId) && challenge == null;
         final mutationLoading = widget.executionController.isLoading(widget.challengeId);
         final error = widget.executionController.errorFor(widget.challengeId) ?? widget.challengeController.errorFor(widget.challengeId);
+        final uploadState = widget.executionController.uploadStateFor(widget.challengeId);
 
         if (isLoading) {
           return Scaffold(
@@ -111,11 +112,21 @@ class _ChallengeExecutionScreenState extends State<ChallengeExecutionScreen> {
               SubmissionComposerCard(
                 challenge: challenge,
                 descriptionController: _descriptionController,
+                uploadState: uploadState,
                 onPickImage: _pickImage,
                 onSubmit: _submit,
                 onRetry: () async {
                   await widget.executionController.retrySubmission(widget.challengeId);
-                  _descriptionController.clear();
+                },
+                onRetryUpload: () async {
+                  try {
+                    await widget.executionController.retryProofUpload(widget.challengeId);
+                    if (!context.mounted) return;
+                    _showSnack('Proof image успешно загружен. Можно отправлять выполнение.');
+                  } catch (error) {
+                    if (!context.mounted) return;
+                    _showSnack(error.toString().replaceFirst('Exception: ', ''));
+                  }
                 },
               ),
               const SizedBox(height: 14),
@@ -138,7 +149,7 @@ class _ChallengeExecutionScreenState extends State<ChallengeExecutionScreen> {
     if (!mounted || file == null) return;
 
     await widget.executionController.attachSubmissionImage(widget.challengeId, file.path);
-    _showSnack('Фото добавлено к proof.');
+    _showSnack('Фото добавлено. Перед отправкой мы загрузим его в storage.');
   }
 
   Future<void> _submit() async {

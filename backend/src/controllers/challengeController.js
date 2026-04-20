@@ -11,6 +11,7 @@
   submitParticipation,
   updateParticipationProgress,
 } from '../services/challengeService.js';
+import { uploadProofImage } from '../services/storageService.js';
 import { sendError, sendSuccess } from '../utils/apiResponse.js';
 
 export async function createChallengeController(req, res) {
@@ -35,6 +36,36 @@ export async function createChallengeController(req, res) {
   } catch (error) {
     console.error('Create challenge error:', error);
     return sendError(res, 'Не удалось создать challenge');
+  }
+}
+
+export async function uploadProofController(req, res) {
+  const userId = req.user?.id;
+  if (!userId) {
+    return sendError(res, 'Не авторизован', 401, 'unauthorized');
+  }
+
+  if (!req.file) {
+    return sendError(res, 'Файл proof не передан.', 400, 'missing_file');
+  }
+
+  try {
+    const upload = await uploadProofImage({
+      buffer: req.file.buffer,
+      mimeType: req.file.mimetype,
+      originalName: req.file.originalname,
+      userId,
+    });
+
+    return sendSuccess(res, { upload }, 201);
+  } catch (error) {
+    console.error('Proof upload error:', error);
+    return sendError(
+      res,
+      error instanceof Error ? error.message : 'Не удалось загрузить proof image.',
+      500,
+      'proof_upload_failed',
+    );
   }
 }
 

@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/feed_challenge.dart';
@@ -337,19 +339,35 @@ class ActionPanel extends StatelessWidget {
             backgroundColor: challenge.executionStatus == FeedExecutionStatus.approved ? AppTheme.success : Colors.white,
             foregroundColor: AppTheme.background,
           ),
-          icon: Icon(challenge.executionStatus == FeedExecutionStatus.notAccepted
-              ? Icons.add_task_rounded
-              : Icons.play_circle_fill_rounded),
+          icon: Icon(
+            challenge.executionStatus == FeedExecutionStatus.notAccepted
+                ? Icons.add_task_rounded
+                : Icons.play_circle_fill_rounded,
+          ),
           label: Text(primaryLabel),
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Expanded(child: _MiniActionButton(icon: challenge.isLiked ? Icons.favorite_rounded : Icons.favorite_border_rounded, label: challenge.isLiked ? 'Нравится' : 'Лайк', onTap: onLike)),
+            Expanded(
+              child: _MiniActionButton(
+                icon: challenge.isLiked ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                label: challenge.isLiked ? 'Нравится' : 'Лайк',
+                onTap: onLike,
+              ),
+            ),
             const SizedBox(width: 10),
-            Expanded(child: _MiniActionButton(icon: challenge.isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded, label: challenge.isSaved ? 'Сохранён' : 'Сохранить', onTap: onSave)),
+            Expanded(
+              child: _MiniActionButton(
+                icon: challenge.isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
+                label: challenge.isSaved ? 'Сохранён' : 'Сохранить',
+                onTap: onSave,
+              ),
+            ),
             const SizedBox(width: 10),
-            Expanded(child: _MiniActionButton(icon: Icons.share_outlined, label: 'Поделиться', onTap: onShare)),
+            Expanded(
+              child: _MiniActionButton(icon: Icons.share_outlined, label: 'Поделиться', onTap: onShare),
+            ),
           ],
         ),
       ],
@@ -370,6 +388,13 @@ class VerificationCard extends StatelessWidget {
         _StatusLine(label: 'Как подтверждается выполнение', value: feedVerificationTypeLabel(challenge.verificationType)),
         const SizedBox(height: 10),
         _StatusLine(label: 'Текущий статус', value: feedExecutionStatusLabel(challenge.executionStatus)),
+        if ((challenge.submissionImagePath ?? '').isNotEmpty) ...[
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: _buildProofImage(challenge.submissionImagePath!),
+          ),
+        ],
         const SizedBox(height: 10),
         Container(
           width: double.infinity,
@@ -517,8 +542,50 @@ class _MiniActionButton extends StatelessWidget {
   }
 }
 
+Widget _buildProofImage(String pathOrUrl) {
+  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
+    return Image.network(
+      pathOrUrl,
+      height: 190,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          height: 190,
+          width: double.infinity,
+          color: AppTheme.cardMuted,
+          alignment: Alignment.center,
+          child: const Text('Не удалось загрузить proof image'),
+        );
+      },
+    );
+  }
+
+  return Image.file(
+    File(pathOrUrl),
+    height: 190,
+    width: double.infinity,
+    fit: BoxFit.cover,
+    errorBuilder: (context, error, stackTrace) {
+      return Container(
+        height: 190,
+        width: double.infinity,
+        color: AppTheme.cardMuted,
+        alignment: Alignment.center,
+        child: const Text('Локальный preview недоступен'),
+      );
+    },
+  );
+}
+
 String _initialsFor(String name) {
-  final parts = name.trim().split(' ').where((part) => part.isNotEmpty).take(2).map((part) => part.substring(0, 1).toUpperCase()).toList();
+  final parts = name
+      .trim()
+      .split(' ')
+      .where((part) => part.isNotEmpty)
+      .take(2)
+      .map((part) => part.substring(0, 1).toUpperCase())
+      .toList();
   if (parts.isEmpty) return 'AV';
   return parts.join();
 }

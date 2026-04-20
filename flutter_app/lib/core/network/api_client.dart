@@ -70,6 +70,24 @@ class ApiClient {
     );
   }
 
+  Future<Map<String, dynamic>> postMultipart({
+    required String baseUrl,
+    required String path,
+    required String filePath,
+    String fileField = 'proof',
+    Map<String, String> fields = const {},
+    bool authorized = false,
+  }) async {
+    return _multipartRequest(
+      baseUrl: baseUrl,
+      path: path,
+      filePath: filePath,
+      fileField: fileField,
+      fields: fields,
+      authorized: authorized,
+    );
+  }
+
   Future<Map<String, dynamic>> _request({
     required String method,
     required String baseUrl,
@@ -126,37 +144,102 @@ class ApiClient {
       throw const NetworkException();
     }
 
-    if (response.statusCode == 401 && authorized) {
-      if (retryOnUnauthorized && await _tryRefreshAccessToken()) {
-        return _request(
-          method: method,
+    return _decodeResponse(
+      response.statusCode,
+      response.body,
+      authorized: authorized,
+      retryOnUnauthorized: retryOnUnauthorized,
+      retry: () => _request(
+        method: method,
+        baseUrl: baseUrl,
+        path: path,
+        body: body,
+        authorized: authorized,
+        retryOnUnauthorized: false,
+      ),
+    );
+  }
+
+  Future<Map<String, dynamic>> _multipartRequest({
+    required String baseUrl,
+    required String path,
+    required String filePath,
+    required String fileField,
+    required Map<String, String> fields,
+    required bool authorized,
+    bool retryOnUnauthorized = true,
+  }) async {
+    final uri = Uri.parse('${baseUrl.replaceAll(RegExp(r'/$'), '')}$path');
+    final request = http.MultipartRequest('POST', uri)
+      ..fields.addAll(fields)
+      ..files.add(await http.MultipartFile.fromPath(fileField, filePath));
+
+    if (authorized) {
+      final accessToken = await _accessTokenProvider();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw const UnauthorizedException('Нужна авторизация пользователя');
+      }
+      request.headers['Authorization'] = 'Bearer $accessToken';
+    }
+
+    try {
+      final streamed = await _httpClient.send(request).timeout(_requestTimeout);
+      final response = await http.Response.fromStream(streamed);
+      return _decodeResponse(
+        response.statusCode,
+        response.body,
+        authorized: authorized,
+        retryOnUnauthorized: retryOnUnauthorized,
+        retry: () => _multipartRequest(
           baseUrl: baseUrl,
           path: path,
-          body: body,
+          filePath: filePath,
+          fileField: fileField,
+          fields: fields,
           authorized: authorized,
           retryOnUnauthorized: false,
-        );
+        ),
+      );
+    } on TimeoutException {
+      throw const NetworkException('Upload слишком долго не отвечает');
+    } on SocketException {
+      throw const NetworkException();
+    } on http.ClientException {
+      throw const NetworkException();
+    }
+  }
+
+  Future<Map<String, dynamic>> _decodeResponse(
+    int statusCode,
+    String body, {
+    required bool authorized,
+    required bool retryOnUnauthorized,
+    required Future<Map<String, dynamic>> Function() retry,
+  }) async {
+    if (statusCode == 401 && authorized) {
+      if (retryOnUnauthorized && await _tryRefreshAccessToken()) {
+        return retry();
       }
 
-      throw UnauthorizedException(_extractErrorMessage(response.body));
+      throw UnauthorizedException(_extractErrorMessage(body));
     }
 
-    if (response.statusCode == 403) {
-      throw ForbiddenException(_extractErrorMessage(response.body));
+    if (statusCode == 403) {
+      throw ForbiddenException(_extractErrorMessage(body));
     }
 
-    if (response.statusCode >= 400) {
+    if (statusCode >= 400) {
       throw AppException(
-        _extractErrorMessage(response.body),
-        statusCode: response.statusCode,
+        _extractErrorMessage(body),
+        statusCode: statusCode,
       );
     }
 
-    if (response.body.trim().isEmpty) {
+    if (body.trim().isEmpty) {
       return const <String, dynamic>{};
     }
 
-    final decoded = jsonDecode(response.body);
+    final decoded = jsonDecode(body);
     if (decoded is! Map<String, dynamic>) {
       throw const AppException('Некорректный ответ сервера');
     }
@@ -173,8 +256,8 @@ class ApiClient {
     }
 
     throw AppException(
-      _extractErrorMessage(response.body),
-      statusCode: response.statusCode,
+      _extractErrorMessage(body),
+      statusCode: statusCode,
     );
   }
 

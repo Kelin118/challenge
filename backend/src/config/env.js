@@ -29,6 +29,10 @@ export const env = {
   moderatorEmails: parseCsvToSet(process.env.MODERATOR_EMAILS),
   verifyRateLimitWindowMs: Number(process.env.VERIFY_RATE_LIMIT_WINDOW_MS || 60000),
   verifyRateLimitMaxRequests: Number(process.env.VERIFY_RATE_LIMIT_MAX_REQUESTS || 5),
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || '',
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || '',
+  cloudinaryFolder: process.env.CLOUDINARY_FOLDER || 'achievement-vault/proofs',
 };
 
 export function requireJwtSecret() {
@@ -38,4 +42,3 @@ export function requireJwtSecret() {
 
   return env.jwtSecret;
 }
-

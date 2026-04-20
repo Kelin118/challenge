@@ -12,8 +12,10 @@ import {
   rejectSubmissionController,
   submitParticipationController,
   updateParticipationProgressController,
+  uploadProofController,
 } from '../controllers/challengeController.js';
 import { authMiddleware } from '../middleware/authMiddleware.js';
+import { proofUploadMiddleware } from '../middleware/proofUploadMiddleware.js';
 import { requireRole } from '../middleware/requireRole.js';
 import { validateRequest } from '../middleware/validateRequest.js';
 import {
@@ -22,7 +24,6 @@ import {
   validateCreateChallenge,
 } from '../validators/challenge.validator.js';
 import {
-  validateParticipationId,
   validateParticipationProgress,
   validateParticipationSubmit,
   validateSubmissionReview,
@@ -30,6 +31,7 @@ import {
 
 const router = Router();
 
+router.post('/uploads/proof', authMiddleware, proofUploadMiddleware, uploadProofController);
 router.post('/challenges', authMiddleware, validateRequest(validateCreateChallenge), createChallengeController);
 router.get('/challenges', validateRequest(validateChallengeFilters), listChallengesController);
 router.get('/challenges/:id', validateRequest(validateChallengeId), getChallengeByIdController);
