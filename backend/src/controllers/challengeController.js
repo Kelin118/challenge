@@ -1,58 +1,46 @@
 ﻿import {
+  acceptChallenge,
+  approveSubmission,
   createChallenge,
   getChallengeById,
   getChallenges,
-  reviewSubmission,
-  submitChallenge,
+  getFeed,
+  getWallet,
+  getWalletTransactions,
+  rejectSubmission,
+  submitParticipation,
+  updateParticipationProgress,
 } from '../services/challengeService.js';
 import { sendError, sendSuccess } from '../utils/apiResponse.js';
 
 export async function createChallengeController(req, res) {
   const creatorUserId = req.user?.id;
-  const {
-    title,
-    description,
-    category,
-    type,
-    rarity,
-    coinCost,
-    coinReward,
-    proofType,
-  } = req.validated;
-
   if (!creatorUserId) {
     return sendError(res, 'Не авторизован', 401, 'unauthorized');
   }
 
   try {
-    const result = await createChallenge({
-      creatorUserId,
-      title,
-      description,
-      category,
-      type,
-      rarity,
-      coinCost,
-      coinReward,
-      proofType,
-    });
+    const result = await createChallenge({ creatorUserId, ...req.validated });
+
+    if (result.type === 'insufficient_coins') {
+      return sendError(
+        res,
+        `Недостаточно coins для создания challenge. Нужно ${result.requiredCoins}, доступно ${result.currentCoins}.`,
+        400,
+        'insufficient_coins',
+      );
+    }
 
     return sendSuccess(res, { challenge: result.challenge }, 201);
   } catch (error) {
-    if (error?.code === '23514') {
-      return sendError(res, 'Некорректные значения challenge', 400, 'validation_error');
-    }
-
     console.error('Create challenge error:', error);
     return sendError(res, 'Не удалось создать challenge');
   }
 }
 
 export async function listChallengesController(req, res) {
-  const { filters } = req.validated;
-
   try {
-    const result = await getChallenges(filters);
+    const result = await getChallenges(req.validated.filters);
     return sendSuccess(res, { challenges: result.challenges });
   } catch (error) {
     console.error('List challenges error:', error);
@@ -61,10 +49,8 @@ export async function listChallengesController(req, res) {
 }
 
 export async function getChallengeByIdController(req, res) {
-  const { challengeId } = req.validated;
-
   try {
-    const result = await getChallengeById(challengeId);
+    const result = await getChallengeById(req.validated.challengeId);
 
     if (result.type === 'not_found') {
       return sendError(res, 'Challenge не найден', 404, 'not_found');
@@ -77,56 +63,121 @@ export async function getChallengeByIdController(req, res) {
   }
 }
 
-export async function submitChallengeController(req, res) {
+export async function acceptChallengeController(req, res) {
   const userId = req.user?.id;
-  const { challengeId, proofUrl, proofType, comment } = req.validated;
-
   if (!userId) {
     return sendError(res, 'Не авторизован', 401, 'unauthorized');
   }
 
   try {
-    const result = await submitChallenge({
-      challengeId,
-      userId,
-      proofUrl,
-      proofType,
-      comment,
-    });
+    const result = await acceptChallenge({ challengeId: req.validated.challengeId, userId });
 
     if (result.type === 'challenge_not_found') {
       return sendError(res, 'Challenge не найден', 404, 'not_found');
     }
 
-    return sendSuccess(res, { submission: result.submission }, 201);
+    return sendSuccess(res, { participation: result.participation }, 201);
   } catch (error) {
-    if (error?.code === '23514') {
-      return sendError(res, 'Некорректные значения submission', 400, 'validation_error');
-    }
-
-    console.error('Submit challenge error:', error);
-    return sendError(res, 'Не удалось создать submission');
+    console.error('Accept challenge error:', error);
+    return sendError(res, 'Не удалось принять challenge');
   }
 }
 
-export async function acceptSubmissionController(req, res) {
-  return reviewSubmissionController(req, res, 'accepted');
+export async function updateParticipationProgressController(req, res) {
+  const userId = req.user?.id;
+  if (!userId) {
+    return sendError(res, 'Не авторизован', 401, 'unauthorized');
+  }
+
+  try {
+    const result = await updateParticipationProgress({ userId, ...req.validated });
+
+    if (result.type === 'not_found') {
+      return sendError(res, 'Participation не найден', 404, 'not_found');
+    }
+
+    if (result.type === 'forbidden') {
+      return sendError(res, 'Нельзя менять чужой participation', 403, 'forbidden');
+    }
+
+    if (result.type === 'immutable_status') {
+      return sendError(res, 'Participation нельзя менять в текущем статусе', 400, 'immutable_status');
+    }
+
+    return sendSuccess(res, { participation: result.participation });
+  } catch (error) {
+    console.error('Update participation progress error:', error);
+    return sendError(res, 'Не удалось обновить progress');
+  }
 }
 
-export async function rejectSubmissionController(req, res) {
-  return reviewSubmissionController(req, res, 'rejected');
+export async function submitParticipationController(req, res) {
+  const userId = req.user?.id;
+  if (!userId) {
+    return sendError(res, 'Не авторизован', 401, 'unauthorized');
+  }
+
+  try {
+    const result = await submitParticipation({ userId, ...req.validated });
+
+    if (result.type === 'not_found') {
+      return sendError(res, 'Participation не найден', 404, 'not_found');
+    }
+
+    if (result.type === 'forbidden') {
+      return sendError(res, 'Нельзя отправлять чужой submission', 403, 'forbidden');
+    }
+
+    if (result.type === 'already_approved') {
+      return sendError(res, 'Participation уже подтверждён', 400, 'already_approved');
+    }
+
+    return sendSuccess(res, { participation: result.participation, submission: result.submission }, 201);
+  } catch (error) {
+    console.error('Submit participation error:', error);
+    return sendError(res, 'Не удалось отправить submission');
+  }
 }
 
-async function reviewSubmissionController(req, res, status) {
+export async function approveSubmissionController(req, res) {
   const reviewerUserId = req.user?.id;
-  const { submissionId } = req.validated;
-
   if (!reviewerUserId) {
     return sendError(res, 'Не авторизован', 401, 'unauthorized');
   }
 
   try {
-    const result = await reviewSubmission(submissionId, reviewerUserId, status);
+    const result = await approveSubmission({ submissionId: req.validated.submissionId, reviewerUserId });
+
+    if (result.type === 'not_found') {
+      return sendError(res, 'Submission не найден', 404, 'not_found');
+    }
+
+    if (result.type === 'already_processed') {
+      return sendSuccess(res, { submission: result.submission, duplicateRewardBlocked: true });
+    }
+
+    return sendSuccess(res, {
+      submission: result.submission,
+      completionEvent: result.completionEvent,
+    });
+  } catch (error) {
+    console.error('Approve submission error:', error);
+    return sendError(res, 'Не удалось подтвердить submission');
+  }
+}
+
+export async function rejectSubmissionController(req, res) {
+  const reviewerUserId = req.user?.id;
+  if (!reviewerUserId) {
+    return sendError(res, 'Не авторизован', 401, 'unauthorized');
+  }
+
+  try {
+    const result = await rejectSubmission({
+      submissionId: req.validated.submissionId,
+      reviewerUserId,
+      reason: req.validated.reason,
+    });
 
     if (result.type === 'not_found') {
       return sendError(res, 'Submission не найден', 404, 'not_found');
@@ -134,8 +185,47 @@ async function reviewSubmissionController(req, res, status) {
 
     return sendSuccess(res, { submission: result.submission });
   } catch (error) {
-    console.error(`${status} submission error:`, error);
-    return sendError(res, 'Не удалось обновить submission');
+    console.error('Reject submission error:', error);
+    return sendError(res, 'Не удалось отклонить submission');
   }
 }
 
+export async function getWalletController(req, res) {
+  const userId = req.user?.id;
+  if (!userId) {
+    return sendError(res, 'Не авторизован', 401, 'unauthorized');
+  }
+
+  try {
+    const result = await getWallet(userId);
+    return sendSuccess(res, { wallet: result.wallet });
+  } catch (error) {
+    console.error('Get wallet error:', error);
+    return sendError(res, 'Не удалось получить wallet');
+  }
+}
+
+export async function getWalletTransactionsController(req, res) {
+  const userId = req.user?.id;
+  if (!userId) {
+    return sendError(res, 'Не авторизован', 401, 'unauthorized');
+  }
+
+  try {
+    const result = await getWalletTransactions(userId);
+    return sendSuccess(res, { transactions: result.transactions });
+  } catch (error) {
+    console.error('Get wallet transactions error:', error);
+    return sendError(res, 'Не удалось получить transactions');
+  }
+}
+
+export async function getFeedController(_req, res) {
+  try {
+    const result = await getFeed();
+    return sendSuccess(res, { items: result.items });
+  } catch (error) {
+    console.error('Get feed error:', error);
+    return sendError(res, 'Не удалось получить feed');
+  }
+}

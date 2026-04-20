@@ -9,6 +9,11 @@ import '../features/achievements/presentation/screens/home_screen.dart';
 import '../features/achievements/presentation/screens/stats_screen.dart';
 import '../features/auth/presentation/controllers/auth_controller.dart';
 import '../features/auth/presentation/screens/auth_screen.dart';
+import '../features/feed/presentation/controllers/challenge_controller.dart';
+import '../features/feed/presentation/controllers/execution_controller.dart';
+import '../features/feed/presentation/controllers/feed_controller.dart';
+import '../features/feed/presentation/controllers/wallet_controller.dart';
+import '../features/feed/presentation/screens/feed_screen.dart';
 import '../features/profile/presentation/controllers/profile_controller.dart';
 import '../features/profile/presentation/screens/profile_bootstrap_screen.dart';
 import '../features/profile/presentation/screens/profile_screen.dart';
@@ -21,12 +26,20 @@ class AchievementVaultApp extends StatefulWidget {
     required this.profileController,
     required this.achievementController,
     required this.sessionController,
+    required this.feedController,
+    required this.challengeController,
+    required this.executionController,
+    required this.walletController,
   });
 
   final AuthController authController;
   final ProfileController profileController;
   final AchievementController achievementController;
   final SessionController sessionController;
+  final FeedController feedController;
+  final ChallengeController challengeController;
+  final ExecutionController executionController;
+  final WalletController walletController;
 
   @override
   State<AchievementVaultApp> createState() => _AchievementVaultAppState();
@@ -58,6 +71,10 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
       widget.profileController,
       widget.achievementController,
       widget.sessionController,
+      widget.feedController,
+      widget.challengeController,
+      widget.executionController,
+      widget.walletController,
     ]);
     widget.achievementController.addListener(_handleAchievementToast);
   }
@@ -79,9 +96,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
 
   void _handleAchievementToast() {
     final toast = widget.achievementController.toastAchievement;
-    if (!mounted || toast == null) {
-      return;
-    }
+    if (!mounted || toast == null) return;
 
     _scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
@@ -127,7 +142,9 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
   Widget _buildHome() {
     if (!widget.authController.isReady ||
         !widget.profileController.isReady ||
-        !widget.achievementController.isReady) {
+        !widget.achievementController.isReady ||
+        !widget.feedController.isReady ||
+        !widget.walletController.isReady) {
       return const _SplashScreen();
     }
 
@@ -158,6 +175,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
             contact: _contactController.text,
           );
           await widget.achievementController.unlock('press-start');
+          await widget.feedController.load();
           _nameController.clear();
           _usernameController.clear();
           _aboutController.clear();
@@ -174,8 +192,14 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
       HomeScreen(
         achievementController: widget.achievementController,
         profileController: widget.profileController,
+        walletController: widget.walletController,
         recentAchievements: recentAchievements.take(3).toList(),
         onOpenProfile: _openProfile,
+      ),
+      FeedScreen(
+        controller: widget.feedController,
+        challengeController: widget.challengeController,
+        executionController: widget.executionController,
       ),
       AchievementsScreen(
         controller: widget.achievementController,
@@ -189,7 +213,8 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
         title: Text(
           switch (_index) {
             0 => 'Главная',
-            1 => 'Достижения',
+            1 => 'Лента',
+            2 => 'Достижения',
             _ => 'Статистика',
           },
         ),
@@ -221,6 +246,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
         onDestinationSelected: (value) => setState(() => _index = value),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Главная'),
+          NavigationDestination(icon: Icon(Icons.dynamic_feed_outlined), label: 'Лента'),
           NavigationDestination(icon: Icon(Icons.emoji_events_outlined), label: 'Достижения'),
           NavigationDestination(icon: Icon(Icons.query_stats_outlined), label: 'Статистика'),
         ],
@@ -235,6 +261,8 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
         password: _passwordController.text,
       );
       await widget.achievementController.load();
+      await widget.feedController.load();
+      await widget.walletController.load();
       _passwordController.clear();
     } catch (error) {
       _showMessage(error.toString().replaceFirst('Exception: ', ''));
@@ -263,9 +291,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
 
   Future<void> _openDetails(Achievement achievement) async {
     final navigator = _navigatorKey.currentState;
-    if (navigator == null) {
-      return;
-    }
+    if (navigator == null) return;
 
     await navigator.push(
       MaterialPageRoute<void>(
@@ -279,9 +305,7 @@ class _AchievementVaultAppState extends State<AchievementVaultApp> {
 
   Future<void> _openProfile() async {
     final navigator = _navigatorKey.currentState;
-    if (navigator == null) {
-      return;
-    }
+    if (navigator == null) return;
 
     await navigator.push(
       MaterialPageRoute<void>(
