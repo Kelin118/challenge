@@ -11,6 +11,7 @@ import achievementsRoutes from './routes/achievementsRoutes.js';
 import { authMiddleware } from './middleware/authMiddleware.js';
 import { verifyRateLimitMiddleware } from './middleware/rateLimit.js';
 import { sendError, sendSuccess } from './utils/apiResponse.js';
+import socialRoutes from './routes/socialRoutes.js';
 
 const app = express();
 const upload = multer({ dest: 'tmp/' });
@@ -43,6 +44,7 @@ app.get('/api/health', (_, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api', challengeRoutes);
 app.use('/api', achievementsRoutes);
+app.use('/api', socialRoutes);
 
 app.post(
   '/api/verify-achievement',
